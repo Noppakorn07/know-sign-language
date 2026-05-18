@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>แดชบอร์ดผู้ใช้</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <a class="logo" href="index.html">🤟 SignBridge</a>
+    <nav>
+      <a href="index.html">หน้าแรก</a>
+      <a href="learn.html">เริ่มเรียน</a>
+      <a href="quiz.html">แบบทดสอบ</a>
+      <a href="practice.html">ฝึกกับกล้อง</a>
+      <a href="dashboard.html" class="active">แดชบอร์ด</a>
+    </nav>
+    <div class="nav-actions" id="navActions"></div>
+  </header>
+
+  <main class="page">
+    <h2>🔥 Streak ของคุณ</h2>
+<p id="streakText">กำลังโหลด...</p>
+    <section class="page-header">
+      <p class="badge">Dashboard</p>
+      <h1 id="welcomeText">แดชบอร์ดผู้ใช้</h1>
+      <p>หน้านี้แสดงข้อมูลผู้ใช้และคะแนนล่าสุดแบบ Prototype ผ่าน localStorage</p>
+    </section>
+    <section class="stats-grid">
+      <div class="stat-card"><p>คะแนน Quiz ล่าสุด</p><h2 id="lastScore">0</h2></div>
+      <div class="stat-card"><p>จำนวนบทเรียนทั้งหมด</p><h2 id="lessonTotal">0</h2></div>
+      <div class="stat-card"><p>สถานะระบบ</p><h2>Prototype</h2></div>
+    </section>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ฝึกกับกล้อง | SignBridge</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <a class="logo" href="index.html">🤟 SignBridge</a>
+    <nav>
+      <a href="index.html">หน้าแรก</a>
+      <a href="learn.html">เริ่มเรียน</a>
+      <a href="quiz.html">แบบทดสอบ</a>
+      <a href="practice.html" class="active">ฝึกกับกล้อง</a>
+      <a href="dashboard.html">แดชบอร์ด</a>
+    </nav>
+    <div class="nav-actions" id="navActions"></div>
+  </header>
+
+  <main class="page">
+    <section class="page-header">
+      <p class="badge">Practice</p>
+      <h1>ฝึกภาษามือผ่านเว็บแคม</h1>
+      <p>หน้านี้เป็น Prototype เปิดกล้องได้จริง และมีปุ่มจำลองผลตรวจจับเพื่อใช้พรีเซนต์แนวทาง AI</p>
+    </section>
+
+    <section class="practice-layout">
+      <div class="camera-card">
+        <video id="camera" autoplay playsinline muted></video>
+        <div id="cameraPlaceholder" class="camera-placeholder">กด “เปิดกล้อง” เพื่อเริ่มฝึก</div>
+      </div>
+      <div class="practice-panel">
+        <h2>โจทย์ฝึกวันนี้</h2>
+        <p id="practicePrompt">ลองทำท่า “สวัสดี” ตามบทเรียน</p>
+        <div class="button-row">
+          <button id="startCameraBtn" class="btn primary">เปิดกล้อง</button>
+          <button id="stopCameraBtn" class="btn secondary">ปิดกล้อง</button>
+        </div>
+        <button id="mockDetectBtn" class="btn ghost">จำลองผลตรวจจับ</button>
+        <div class="result-box">
+          <p>ผลลัพธ์</p>
+          <h3 id="detectResult">ยังไม่ได้ตรวจจับ</h3>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/camera.js"></script>
+</body>
+</html>

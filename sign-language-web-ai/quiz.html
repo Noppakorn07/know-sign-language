@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>แบบทดสอบ | SignBridge</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <a class="logo" href="index.html">🤟 SignBridge</a>
+    <nav>
+      <a href="index.html">หน้าแรก</a>
+      <a href="learn.html">เริ่มเรียน</a>
+      <a href="quiz.html" class="active">แบบทดสอบ</a>
+      <a href="practice.html">ฝึกกับกล้อง</a>
+      <a href="dashboard.html">แดชบอร์ด</a>
+    </nav>
+    <div class="nav-actions" id="navActions"></div>
+  </header>
+
+  <main class="page quiz-page">
+    <section class="page-header">
+      <p class="badge">Quiz</p>
+      <h1>แบบทดสอบหลังเรียน</h1>
+      <p>ดูวิดีโอภาษามือ แล้วเลือกคำตอบที่ถูกต้อง</p>
+    </section>
+
+    <section class="quiz-card">
+      <div class="quiz-top">
+        <span id="questionCount">ข้อที่ 1</span>
+        <span id="scoreText">คะแนน 0</span>
+      </div>
+      <h2 id="questionTitle">ท่านี้หมายถึงอะไร?</h2>
+      <div id="quizVideoBox" class="video-box"></div>
+      <div id="optionsBox" class="options-box"></div>
+      <p id="feedback" class="feedback"></p>
+      <button id="nextBtn" class="btn primary hidden">ข้อต่อไป</button>
+      <button id="restartBtn" class="btn secondary hidden">เริ่มใหม่</button>
+    </section>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/quiz.js"></script>
+</body>
+</html>

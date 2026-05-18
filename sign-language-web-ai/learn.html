@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>เริ่มเรียน | SignBridge</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <a class="logo" href="index.html">🤟 SignBridge</a>
+    <nav>
+      <a href="index.html">หน้าแรก</a>
+      <a href="learn.html" class="active">เริ่มเรียน</a>
+      <a href="quiz.html">แบบทดสอบ</a>
+      <a href="practice.html">ฝึกกับกล้อง</a>
+      <a href="dashboard.html">แดชบอร์ด</a>
+    </nav>
+    <div class="nav-actions" id="navActions"></div>
+  </header>
+
+  <main class="page">
+    <section class="page-header">
+      <p class="badge">Learning</p>
+      <h1>บทเรียนภาษามือไทย</h1>
+      <p>เลือกหมวดหมู่หรือค้นหาคำที่ต้องการเรียน วิดีโอตัวอย่างสามารถเปลี่ยนเป็นไฟล์ของคุณเองได้</p>
+    </section>
+
+    <section class="toolbar">
+      <input id="searchInput" type="text" placeholder="ค้นหา เช่น สวัสดี, ขอบคุณ, ช่วยด้วย" />
+      <select id="categoryFilter">
+        <option value="all">ทุกหมวดหมู่</option>
+      </select>
+    </section>
+
+    <section id="lessonGrid" class="lesson-grid"></section>
+  </main>
+
+  <footer class="footer"><p>เพิ่มข้อมูลบทเรียนได้ที่ js/data.js</p></footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/learn.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>เข้าสู่ระบบ | SignBridge</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <main class="auth-page">
+    <form id="loginForm" class="auth-card">
+      <a class="logo center" href="index.html">🤟 SignBridge</a>
+      <h1>เข้าสู่ระบบ</h1>
+      <label>ชื่อผู้ใช้</label>
+      <input id="loginUsername" type="text" required />
+      <label>รหัสผ่าน</label>
+      <input id="loginPassword" type="password" required />
+      <button class="btn primary full" type="submit">เข้าสู่ระบบ</button>
+      <p id="authMessage" class="feedback"></p>
+      <p>ยังไม่มีบัญชี? <a href="register.html">สมัครสมาชิก</a></p>
+    </form>
+  </main>
+  <script src="js/auth.js"></script>
+</body>
+</html>

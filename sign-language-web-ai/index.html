@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sign for love</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <a class="logo" href="index.html">🤟 SignBridge</a>
+    <nav>
+      <a href="index.html" class="active">หน้าแรก</a>
+      <a href="learn.html">เริ่มเรียน</a>
+      <a href="quiz.html">แบบทดสอบ</a>
+      <a href="practice.html">ฝึกกับกล้อง</a>
+      <a href="dashboard.html">แดชบอร์ด</a>
+    </nav>
+    <div class="nav-actions" id="navActions"></div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-text">
+        <p class="badge">Prototype</p>
+        <h1>เรียนรู้ภาษามือไทย เพื่อสื่อสารอย่างเข้าใจมากขึ้น</h1>
+        <p>เว็บต้นแบบสำหรับคนทั่วไปที่อยากเรียนภาษามือไทยเบื้องต้น มีบทเรียน วิดีโอ แบบทดสอบ และหน้าเปิดกล้องสำหรับฝึกปฏิบัติ</p>
+        <div class="hero-buttons">
+          <a class="btn primary" href="learn.html">เริ่มเรียนเลย</a>
+          <a class="btn secondary" href="practice.html">ลองฝึกกับกล้อง</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hand-icon">
+         <img src="images/logo1.png" alt="logo">
+        </div>
+        <h2>3 โมดูลหลัก</h2>
+        <ul>
+          <li>เรียนจากวิดีโอภาษามือ</li>
+          <li>ทำแบบทดสอบหลังเรียน</li>
+          <li>ฝึกทำท่าผ่านเว็บแคม</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">
+        <p class="badge">Features</p>
+        <h2>สิ่งที่เว็บต้นแบบนี้ทำได้</h2>
+      </div>
+      <div class="feature-grid">
+        <article class="feature-card">
+          <h3>📚 บทเรียน</h3>
+          <p>เพิ่มคำศัพท์ภาษามือได้จากไฟล์ <b>js/data.js</b> และวางวิดีโอไว้ในโฟลเดอร์ <b>videos/</b></p>
+        </article>
+        <article class="feature-card">
+          <h3>🧠 แบบทดสอบ</h3>
+          <p>สุ่มคำถามจากข้อมูลบทเรียน ตอบแล้วมีคะแนน และบันทึกลงบัญชีผู้ใช้แบบ Prototype</p>
+        </article>
+        <article class="feature-card">
+          <h3>📷 ฝึกกับกล้อง</h3>
+          <p>เปิดเว็บแคมได้จริง และมีโหมดจำลองผลตรวจจับ เพื่อใช้พรีเซนต์แนวคิด AI</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>SignBridge Prototype | เว็บเรียนภาษามือไทย</p>
+  </footer>
+<script src="js/streak.js">ไฟ</script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
