@@ -1,5 +1,5 @@
-const USER_KEY = 'signbridge_users';
-const CURRENT_USER_KEY = 'signbridge_current_user';
+const USER_KEY = 'know-sign-langague';
+const CURRENT_USER_KEY = 'know-sign-langague';
 
 function getUsers() {
   return JSON.parse(localStorage.getItem(USER_KEY) || '[]');
