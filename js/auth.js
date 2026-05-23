@@ -55,7 +55,9 @@ document.addEventListener('DOMContentLoaded', () => {
       users.push(newUser);
       saveUsers(users);
       setCurrentUser({ username, lastScore: 0 });
-      window.location.href = 'dashboard.html';
+      const redirect = localStorage.getItem('sb_redirect');
+      localStorage.removeItem('sb_redirect');
+      window.location.href = redirect || 'dashboard.html';
     });
   }
 
@@ -74,7 +76,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       setCurrentUser({ username: found.username, lastScore: found.lastScore || 0 });
-      window.location.href = 'dashboard.html';
+      const redirect = localStorage.getItem('sb_redirect');
+      localStorage.removeItem('sb_redirect');
+      window.location.href = redirect || 'dashboard.html';
     });
   }
 });
@@ -89,4 +93,14 @@ function saveLastScore(score) {
     saveUsers(users);
   }
   setCurrentUser({ ...current, lastScore: score });
+}
+// ─── Guard: ต้อง login ก่อนเข้าหน้านี้ ───────────────────
+function requireLogin() {
+  const user = getCurrentUser();
+  if (!user) {
+    // เก็บ URL ปัจจุบันไว้ redirect กลับหลัง login
+    localStorage.setItem('sb_redirect', window.location.href);
+    window.location.href = 'login.html';
+  }
+  return user;
 }
