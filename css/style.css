@@ -149,3 +149,391 @@ select { max-width: 260px; }
   width: 120px;
   height: auto;
 }
+
+.category-section {
+  margin-bottom: 48px;
+}
+.category-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e7ebf5;
+}
+.cat-icon {
+  font-size: 36px;
+  width: 56px;
+  height: 56px;
+  background: #eef3ff;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.cat-title {
+  margin: 0;
+  font-size: 22px;
+  color: #172033;
+}
+.cat-count {
+  margin: 2px 0 0;
+  font-size: 14px;
+  color: #6b7590;
+}
+.cards-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+/* done state */
+.lesson-card.done { border-color: #12b886; }
+.done-tag { background: #e6faf3 !important; color: #12b886 !important; }
+.level-สำคัญ { background: #fff3f3 !important; color: #fa5252 !important; }
+
+/* placeholder เมื่อไม่มีวิดีโอ */
+.no-video {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: #8898b5;
+  font-size: 15px;
+  text-align: center;
+  line-height: 1.8;
+  background: #eef3ff;
+}
+.empty-msg { color: #6b7590; padding: 24px 0; }
+/* ── Video Thumb (แทน video-box เดิมใน card) ────────────── */
+.video-thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #eef3ff;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+.video-thumb video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+.video-thumb .play-btn {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 32px;
+  background: rgba(0,0,0,.25);
+  color: white;
+  transition: background .2s;
+}
+.video-thumb:hover .play-btn { background: rgba(59,91,219,.55); }
+.no-video-thumb {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: #8898b5;
+  font-size: 14px;
+  text-align: center;
+  line-height: 2;
+  pointer-events: none;
+}
+.watch-btn { margin-top: 10px; font-size: 14px; padding: 10px 14px; }
+
+/* ── Modal ───────────────────────────────────────────────── */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(10,15,30,.75);
+  backdrop-filter: blur(6px);
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+.modal-box {
+  background: white;
+  border-radius: 24px;
+  width: min(780px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 32px 80px rgba(0,0,0,.35);
+  animation: modalIn .2s ease;
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(.95) translateY(12px); }
+  to   { opacity: 1; transform: scale(1)  translateY(0); }
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 22px 24px 16px;
+}
+.modal-title { margin: 0; font-size: 22px; }
+.modal-desc  { margin: 4px 0 0; color: #5d6980; font-size: 15px; }
+.modal-close {
+  background: #f0f2f8;
+  border: 0;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+}
+.modal-close:hover { background: #e0e5f5; }
+.modal-video-wrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #101828;
+}
+.modal-video-wrap video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.modal-no-video {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: #8898b5;
+  text-align: center;
+  line-height: 2;
+  font-size: 15px;
+}
+.modal-footer {
+  display: flex;
+  gap: 8px;
+  padding: 16px 24px 22px;
+  flex-wrap: wrap;
+}
+
+/* ── responsive modal บนมือถือ ───────────────────────────── */
+@media (max-width: 600px) {
+  .modal-box { border-radius: 16px; }
+  .modal-header { padding: 16px 16px 12px; }
+  .modal-footer { padding: 12px 16px 18px; }
+  .modal-title { font-size: 18px; }
+}
+/* ── Quiz Setup ──────────────────────────────────────────── */
+.setup-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+  margin-bottom: 24px;
+}
+.setup-card {
+  background: white;
+  border: 1px solid #e7ebf5;
+  border-radius: 20px;
+  padding: 22px;
+  box-shadow: 0 4px 16px rgba(40,63,120,.06);
+}
+.setup-card h3 { margin: 0 0 14px; font-size: 16px; }
+.cat-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+.cat-btn {
+  background: #f0f3fb;
+  border: 1.5px solid #dce3f6;
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all .15s;
+}
+.cat-btn.active { background: #3b5bdb; color: white; border-color: #3b5bdb; }
+.mode-buttons { display: flex; flex-direction: column; gap: 10px; }
+.mode-btn {
+  background: #f7f9ff;
+  border: 2px solid #dce3f6;
+  border-radius: 14px;
+  padding: 14px;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all .15s;
+}
+.mode-btn.active { border-color: #3b5bdb; background: #eef3ff; }
+.mode-icon { font-size: 20px; display: block; margin-bottom: 4px; }
+.mode-btn strong { display: block; font-size: 14px; }
+.mode-btn small { color: #6b7590; font-size: 12px; }
+.count-buttons { display: flex; gap: 10px; }
+.count-btn {
+  flex: 1;
+  background: #f0f3fb;
+  border: 2px solid #dce3f6;
+  border-radius: 12px;
+  padding: 10px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  font-size: 14px;
+}
+.count-btn.active { background: #3b5bdb; color: white; border-color: #3b5bdb; }
+.start-btn { width: 100%; padding: 16px; font-size: 16px; border-radius: 16px; }
+
+/* ── Quiz Area ───────────────────────────────────────────── */
+.quiz-progress-bar {
+  height: 6px;
+  background: #e7ebf5;
+  border-radius: 999px;
+  margin: 12px 0 20px;
+  overflow: hidden;
+}
+#progressFill {
+  height: 100%;
+  background: #3b5bdb;
+  border-radius: 999px;
+  transition: width .4s ease;
+}
+.quit-btn {
+  background: none;
+  border: 1px solid #dce3f6;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  color: #6b7590;
+  font-family: inherit;
+}
+.quit-btn:hover { background: #fff0f0; color: #fa5252; border-color: #fa5252; }
+
+/* วิดีโอโจทย์ */
+.quiz-video-wrap {
+  position: relative;
+  margin-bottom: 20px;
+}
+.quiz-video-box {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #101828;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.quiz-video-box video { width: 100%; height: 100%; object-fit: contain; }
+.no-video-msg { color: #8898b5; padding: 20px; text-align: center; }
+.video-expand-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0,0,0,.55);
+  color: white;
+  border: 0;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.video-expand-btn:hover { background: rgba(59,91,219,.8); }
+
+/* ตัวเลือกแบบข้อความ */
+.option-btn { transition: all .15s; }
+.option-btn.correct-ans { background: #e6faf3 !important; border-color: #12b886 !important; color: #0ca678; }
+.option-btn.wrong-ans   { background: #fff3f3 !important; border-color: #fa5252 !important; color: #e03131; }
+
+/* ตัวเลือกแบบวิดีโอ */
+.video-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.video-option-wrap {
+  border: 2.5px solid #e7ebf5;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color .15s, transform .1s;
+}
+.video-option-wrap:hover { border-color: #3b5bdb; transform: scale(1.02); }
+.video-option-wrap.correct-ans { border-color: #12b886; background: #e6faf3; }
+.video-option-wrap.wrong-ans   { border-color: #fa5252; background: #fff3f3; }
+.video-option-thumb {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: #eef3ff;
+  overflow: hidden;
+}
+.video-option-thumb video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.video-option-thumb.no-src::after {
+  content: '🎬';
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 28px;
+}
+.play-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: white;
+  font-size: 22px;
+  background: rgba(0,0,0,.22);
+  pointer-events: none;
+}
+.expand-option-btn {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  background: rgba(0,0,0,.5);
+  color: white;
+  border: 0;
+  border-radius: 6px;
+  padding: 3px 7px;
+  font-size: 13px;
+  cursor: pointer;
+  z-index: 2;
+}
+.expand-option-btn:hover { background: rgba(59,91,219,.8); }
+
+
+.result-card {
+  background: white;
+  border: 1px solid #e7ebf5;
+  border-radius: 26px;
+  padding: 40px 28px;
+  text-align: center;
+  max-width: 480px;
+  margin: auto;
+  box-shadow: 0 18px 40px rgba(40,63,120,.08);
+}
+.result-emoji { font-size: 56px; margin-bottom: 8px; }
+.result-detail { color: #5d6980; margin: 8px 0 24px; }
+.result-score-ring {
+  position: relative;
+  width: 140px;
+  margin: 0 auto 28px;
+}
+.result-score-ring svg { width: 100%; }
+#scoreRing { transition: stroke-dashoffset 1s ease; }
+.ring-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+#ringScore { font-size: 36px; font-weight: 800; color: #3b5bdb; }
+#ringTotal { font-size: 13px; color: #8898b5; }
+.result-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .video-options { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .setup-grid { grid-template-columns: 1fr; }
+  .count-buttons { gap: 6px; }
+}

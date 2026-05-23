@@ -22,23 +22,117 @@
   <main class="page quiz-page">
     <section class="page-header">
       <p class="badge">Quiz</p>
-      <h1>แบบทดสอบหลังเรียน</h1>
-      <p>ดูวิดีโอภาษามือ แล้วเลือกคำตอบที่ถูกต้อง</p>
+      <h1>แบบทดสอบ</h1>
+      <p>เลือกหมวดหมู่และรูปแบบที่ต้องการทดสอบ</p>
     </section>
 
-    <section class="quiz-card">
-      <div class="quiz-top">
-        <span id="questionCount">ข้อที่ 1</span>
-        <span id="scoreText">คะแนน 0</span>
+    <!-- ── หน้าตั้งค่าก่อนเริ่ม ── -->
+    <div id="quizSetup">
+      <div class="setup-grid">
+
+        <div class="setup-card">
+          <h3>📂 เลือกหมวดหมู่</h3>
+          <div id="catButtons" class="cat-buttons"></div>
+        </div>
+
+        <div class="setup-card">
+          <h3>🎯 รูปแบบข้อสอบ</h3>
+          <div class="mode-buttons">
+            <button class="mode-btn active" data-mode="video2text">
+              <span class="mode-icon">🎬 → 📝</span>
+              <strong>ดูคลิป → เลือกคำ</strong>
+              <small>ดูวิดีโอภาษามือ แล้วเลือกว่าหมายถึงอะไร</small>
+            </button>
+            <button class="mode-btn" data-mode="text2video">
+              <span class="mode-icon">📝 → 🎬</span>
+              <strong>ดูคำ → เลือกคลิป</strong>
+              <small>อ่านคำ แล้วเลือกคลิปภาษามือที่ถูกต้อง</small>
+            </button>
+          </div>
+        </div>
+
+        <div class="setup-card">
+          <h3>🔢 จำนวนข้อ</h3>
+          <div class="count-buttons">
+            <button class="count-btn active" data-count="5">5 ข้อ</button>
+            <button class="count-btn" data-count="10">10 ข้อ</button>
+            <button class="count-btn" data-count="all">ทั้งหมด</button>
+          </div>
+        </div>
+
       </div>
-      <h2 id="questionTitle">ท่านี้หมายถึงอะไร?</h2>
-      <div id="quizVideoBox" class="video-box"></div>
-      <div id="optionsBox" class="options-box"></div>
-      <p id="feedback" class="feedback"></p>
-      <button id="nextBtn" class="btn primary hidden">ข้อต่อไป</button>
-      <button id="restartBtn" class="btn secondary hidden">เริ่มใหม่</button>
-    </section>
+      <button class="btn primary start-btn" id="startBtn">▶ เริ่มทำแบบทดสอบ</button>
+    </div>
+
+    <!-- ── หน้าทำข้อสอบ ── -->
+    <div id="quizArea" class="hidden">
+      <div class="quiz-card">
+        <div class="quiz-top">
+          <span id="questionCount">ข้อที่ 1</span>
+          <span id="scoreText">คะแนน 0</span>
+          <button class="quit-btn" id="quitBtn">✕ ออก</button>
+        </div>
+
+        <div class="quiz-progress-bar"><div id="progressFill"></div></div>
+
+        <h2 id="questionTitle"></h2>
+
+        <!-- วิดีโอ (สำหรับ video2text) -->
+        <div id="quizVideoWrap" class="quiz-video-wrap hidden">
+          <div id="quizVideoBox" class="quiz-video-box"></div>
+          <button class="video-expand-btn" id="expandBtn" title="ดูเต็มจอ">⛶</button>
+        </div>
+
+        <!-- ตัวเลือก -->
+        <div id="optionsBox" class="options-box"></div>
+
+        <p id="feedback" class="feedback"></p>
+        <button id="nextBtn" class="btn primary hidden">ข้อต่อไป →</button>
+      </div>
+    </div>
+
+    <!-- ── หน้าผลลัพธ์ ── -->
+    <div id="quizResult" class="hidden">
+      <div class="result-card">
+        <div id="resultEmoji" class="result-emoji"></div>
+        <h2 id="resultTitle"></h2>
+        <p id="resultDetail" class="result-detail"></p>
+        <div class="result-score-ring">
+          <svg viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="#e7ebf5" stroke-width="12"/>
+            <circle id="scoreRing" cx="60" cy="60" r="50" fill="none" stroke="#3b5bdb"
+              stroke-width="12" stroke-linecap="round"
+              stroke-dasharray="314" stroke-dashoffset="314"
+              transform="rotate(-90 60 60)"/>
+          </svg>
+          <div class="ring-text">
+            <span id="ringScore">0</span>
+            <small id="ringTotal"></small>
+          </div>
+        </div>
+        <div class="result-actions">
+          <button class="btn primary" id="retryBtn">🔄 ทำซ้ำ</button>
+          <button class="btn secondary" id="backSetupBtn">⚙️ ตั้งค่าใหม่</button>
+        </div>
+      </div>
+    </div>
+
   </main>
+
+  <!-- Modal วิดีโอเต็มจอ -->
+  <div id="videoModal" class="hidden">
+    <div class="modal-backdrop" id="modalBackdrop">
+      <div class="modal-box">
+        <div class="modal-header">
+          <span id="modalLabel"></span>
+          <button class="modal-close" id="modalClose">✕</button>
+        </div>
+        <div class="modal-video-wrap">
+          <video id="modalVideo" controls></video>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="js/data.js"></script>
   <script src="js/auth.js"></script>

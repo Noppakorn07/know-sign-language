@@ -1,54 +1,43 @@
-// ใส่ข้อมูลบทเรียนตรงนี้
-// วิธีใส่วิดีโอของตัวเอง: เอาไฟล์ mp4 ไปไว้ในโฟลเดอร์ videos/ แล้วแก้ path ในช่อง video
-// เช่น video: "videos/hello.mp4"
+// ─── ข้อมูลบทเรียน ────────────────────────────────────────
+// วิธีใส่วิดีโอ: เอาไฟล์ .mp4 ไว้ในโฟลเดอร์ images-video/
+// แล้วแก้ video: "images-video/ชื่อไฟล์.mp4"
+// ถ้ายังไม่มีวิดีโอ ปล่อย video: "" ไว้ก่อนได้
 
 const lessons = [
-  {
-    id: 1,
-    category: "การทักทาย",
-    title: "สวัสดี",
-    description: "ใช้สวัสดีที่อายุเท่ากัน",
-    level: "เริ่มต้น",
-    video: "sawatdee.mp4"
-  },
-  {
-    id: 2,
-    category: "การทักทาย",
-    title: "ขอบคุณ",
-    description: "ใช้แสดงความขอบคุณ",
-    level: "เริ่มต้น",
-    video: "videos/sample-thankyou.mp4"
-  },
-  {
-    id: 3,
-    category: "ชีวิตประจำวัน",
-    title: "กินข้าว",
-    description: "ใช้สื่อสารเกี่ยวกับการรับประทานอาหาร",
-    level: "เริ่มต้น",
-    video: "videos/sample-eat.mp4"
-  },
-  {
-    id: 4,
-    category: "ชีวิตประจำวัน",
-    title: "ไปไหน",
-    description: "ใช้ถามสถานที่หรือจุดหมาย",
-    level: "เริ่มต้น",
-    video: "videos/sample-where.mp4"
-  },
-  {
-    id: 5,
-    category: "ฉุกเฉิน",
-    title: "ช่วยด้วย",
-    description: "ใช้ขอความช่วยเหลือในสถานการณ์จำเป็น",
-    level: "สำคัญ",
-    video: "videos/sample-help.mp4"
-  },
-  {
-    id: 6,
-    category: "มารยาท",
-    title: "ขอโทษ",
-    description: "ใช้เมื่อต้องการขอโทษ",
-    level: "เริ่มต้น",
-    video: "videos/sample-sorry.mp4"
-  }
+
+  // ── การทักทาย ──────────────────────────────────────────
+  { id: 1,  category: "การทักทาย", title: "สวัสดี",                description: "ทักทายทั่วไป ใช้ได้ทุกวัย",       level: "เริ่มต้น", video: "images-video/sawatdee.mp4" },
+  { id: 2,  category: "การทักทาย", title: "ขอบคุณ",              description: "ขอบคุณ(อายุเท่ากันหรือน้อยกว่า)",                 level: "เริ่มต้น", video: "images-video/ขอบคุณ.mp4" },
+  { id: 3,  category: "การทักทาย", title: "สวัสดี ผู้ใหญ่ ",          description: "ใช้กับผู้ใหญ่ ผู้มีอาวุโส ผู้มีตำแหน่งสูง",          level: "เริ่มต้น", video: "images-video/sawatdee1.mp4" },
+  { id: 4,  category: "การทักทาย", title: "ใช่",              description: "ใช่ ใช่",               level: "เริ่มต้น", video: "images-video/ใช่.mp4" },
+  { id: 5,  category: "การทักทาย", title: "สบายดี",          description: "สบายดี",          level: "เริ่มต้น", video: "images-video/sabydee.mp4" },
+
+  // ── มารยาท ─────────────────────────────────────────────
+  { id: 6,  category: "มารยาท",    title: "ขอโทษ",             description: "ใช้เมื่อต้องการขอโทษ",           level: "เริ่มต้น", video: "" },
+  { id: 7,  category: "มารยาท",    title: "ไม่เป็นไร",            description: "ตอบรับคำขอโทษหรือปฏิเสธสุภาพ",  level: "เริ่มต้น", video: "" },
+  { id: 8,  category: "มารยาท",    title: "ได้โปรด / ขอ",       description: "ใช้ขอร้องอย่างสุภาพ",            level: "เริ่มต้น", video: "" },
+
+  // ── ชีวิตประจำวัน ──────────────────────────────────────
+  { id: 9,  category: "ชีวิตประจำวัน", title: "กินข้าว",            description: "สื่อสารเรื่องการรับประทานอาหาร", level: "เริ่มต้น", video: "" },
+  { id: 10, category: "ชีวิตประจำวัน", title: "ดื่มน้ำ",            description: "สื่อสารเรื่องการดื่ม",           level: "เริ่มต้น", video: "" },
+  { id: 11, category: "ชีวิตประจำวัน", title: "นอนหลับ",          description: "บอกว่าง่วงหรือต้องการนอน",      level: "เริ่มต้น", video: "" },
+  { id: 12, category: "ชีวิตประจำวัน", title: "ไปไหน",           description: "ถามสถานที่หรือจุดหมาย",         level: "เริ่มต้น", video: "" },
+  { id: 13, category: "ชีวิตประจำวัน", title: "บ้าน",              description: "สถานที่อยู่อาศัย",              level: "เริ่มต้น", video: "" },
+  { id: 14, category: "ชีวิตประจำวัน", title: "โรงเรียน",          description: "สถานที่เรียน",                   level: "เริ่มต้น", video: "" },
+
+  // ── ตัวเลข ─────────────────────────────────────────────
+  { id: 15, category: "ตัวเลข",    title: "1–5",                  description: "ตัวเลข 1 ถึง 5",                level: "เริ่มต้น", video: "" },
+  { id: 16, category: "ตัวเลข",    title: "6–10",                 description: "ตัวเลข 6 ถึง 10",               level: "เริ่มต้น", video: "" },
+  { id: 17, category: "ตัวเลข",    title: "10–100",               description: "ตัวเลขหลักสิบ",                 level: "กลาง",    video: "" },
+
+  // ── สีและสิ่งของ ───────────────────────────────────────
+  { id: 18, category: "สีและสิ่งของ", title: "สีแดง / น้ำเงิน / เขียว", description: "สีพื้นฐาน",            level: "เริ่มต้น", video: "" },
+  { id: 19, category: "สีและสิ่งของ", title: "หนังสือ",           description: "อุปกรณ์การเรียน",               level: "เริ่มต้น", video: "" },
+  { id: 20, category: "สีและสิ่งของ", title: "โทรศัพท์",         description: "อุปกรณ์สื่อสาร",                level: "เริ่มต้น", video: "" },
+
+  // ── ฉุกเฉิน ────────────────────────────────────────────
+  { id: 21, category: "ฉุกเฉิน",   title: "ช่วยด้วย",            description: "ขอความช่วยเหลือเร่งด่วน",       level: "สำคัญ",   video: "" },
+  { id: 22, category: "ฉุกเฉิน",   title: "เจ็บปวด",             description: "บอกว่าเจ็บหรือไม่สบาย",        level: "สำคัญ",   video: "" },
+  { id: 23, category: "ฉุกเฉิน",   title: "หมอ / โรงพยาบาล",    description: "ขอรับการรักษา",                  level: "สำคัญ",   video: "" },
+  { id: 24, category: "ฉุกเฉิน",   title: "โทรศัพท์ฉุกเฉิน",    description: "แจ้งเหตุฉุกเฉิน",               level: "สำคัญ",   video: "" },
 ];
