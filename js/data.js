@@ -7,9 +7,9 @@ const lessons = [
     id: 1,
     category: "การทักทาย",
     title: "สวัสดี",
-    description: "ใช้สำหรับทักทายเมื่อพบกัน",
+    description: "ใช้สวัสดีที่อายุเท่ากัน",
     level: "เริ่มต้น",
-    video: "videos/sample-hello.mp4"
+    video: "sawatdee.mp4"
   },
   {
     id: 2,
