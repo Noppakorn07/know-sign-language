@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>วิดีโอคอลภาษามือ - SignBridge</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .video-page-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+    .status-box {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #1e293b;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      border-left: 5px solid var(--primary, #4f46e5);
+    }
+    .video-layout-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      width: 100%;
+    }
+    @media (max-width: 768px) {
+      .video-layout-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .video-stream-card {
+      position: relative;
+      background: #0f172a;
+      border-radius: 16px;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .video-stream-card video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    #localVideo {
+      transform: scaleX(-1);
+    }
+    .stream-tag {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: rgba(15, 23, 42, 0.75);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      backdrop-filter: blur(4px);
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .interpreter-subtitle-overlay {
+      position: absolute;
+      bottom: 20px;
+      left: 5%;
+      width: 90%;
+      background: rgba(15, 23, 42, 0.85);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: 500;
+      font-size: 1.1rem;
+      backdrop-filter: blur(4px);
+      display: none;
+      z-index: 10;
+    }
+    .interpreter-subtitle-overlay.active {
+      display: block;
+    }
+    .interpreter-badge {
+      background: #38bdf8;
+      color: #0f172a;
+      font-size: 0.75rem;
+      font-weight: bold;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-right: 8px;
+    }
+    .call-actions-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 10px;
+    }
+    .action-trigger-btn {
+      background: var(--primary, #4f46e5);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+      transition: all 0.2s ease;
+    }
+    .action-trigger-btn:hover {
+      opacity: 0.95;
+      transform: translateY(-2px);
+    }
+    .action-trigger-btn:disabled {
+      background: #9ca3af;
+      color: #e5e7eb;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    .action-trigger-btn.searching {
+      background: #eab308;
+      box-shadow: 0 4px 6px -1px rgba(234, 179, 8, 0.2);
+    }
+    .action-trigger-btn.off {
+      background: #6b7280;
+    }
+    .btn-hangup-call {
+      background: #ef4444;
+      box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.2);
+    }
+    .btn-next-match {
+      background: #f59e0b;
+      color: #fff;
+      box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.2);
+    }
+    .btn-report-incident {
+      background: transparent;
+      border: 2px solid #ef4444;
+      color: #ef4444;
+      box-shadow: none;
+    }
+    .btn-report-incident:hover {
+      background: #ef4444;
+      color: white;
+    }
+    .auth-blocker {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.95);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .auth-card {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      max-width: 450px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+      color: #1e293b;
+    }
+    .auth-card i {
+      font-size: 4rem;
+      color: #4f46e5;
+      margin-bottom: 20px;
+    }
+    .auth-card h2 {
+      margin-bottom: 12px;
+      font-size: 1.6rem;
+    }
+    .auth-card p {
+      color: #64748b;
+      margin-bottom: 30px;
+      line-height: 1.5;
+    }
+    .auth-card .btn-login {
+      background: #4f46e5;
+      color: white;
+      text-decoration: none;
+      padding: 14px 30px;
+      border-radius: 50px;
+      font-weight: 600;
+      display: inline-block;
+      transition: background 0.2s;
+    }
+    .auth-card .btn-login:hover {
+      background: #4338ca;
+    }
+  </style>
+  <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+</head>
+<body>
+
+  <div id="authBlocker" class="auth-blocker">
+    <div class="auth-card">
+      <i class="fa-solid fa-lock"></i>
+      <h2>จำเป็นต้องเข้าสู่ระบบ</h2>
+      <p>กรุณาเข้าสู่ระบบบัญชีผู้ใช้ SignBridge ของคุณก่อน เพื่อเข้าใช้งานห้องวิดีโอคอลสุ่มจับคู่ภาษามือ</p>
+      <a href="index.html" class="btn-login" id="fallbackLoginBtn">กลับไปหน้าแรกเพื่อล็อกอิน</a>
+    </div>
+  </div>
+
+  <header class="navbar">
+    <a class="logo" href="index.html">🤟 SignBridge</a>
+    <nav>
+      <a href="index.html">หน้าแรก</a>
+      <a href="learn.html">เริ่มเรียน</a>
+      <a href="quiz.html">แบบทดสอบ</a>
+      <a href="practice.html">ฝึกกับกล้อง</a>
+      <a href="dashboard.html">แดชบอร์ด</a>
+      <a href="call.html" class="active">วิดีโอคอลภาษามือ</a>
+    </nav>
+    <div class="nav-actions" id="navActions"></div>
+  </header>
+
+  <main>
+    <div class="video-page-container">
+      
+      <div class="status-box">
+        <span id="statusText">กรุณากดปุ่มเพื่อเปิดใช้งานกล้องและเริ่มระบบสุ่มจับคู่</span>
+      </div>
+
+      <div class="video-layout-grid">
+        <div class="video-stream-card">
+          <div class="stream-tag"><i class="fa-solid fa-user"></i> กล้องของคุณ</div>
+          <video id="localVideo" autoplay playsinline muted></video>
+        </div>
+        
+        <div class="video-stream-card">
+          <div class="stream-tag" style="background: #2563eb;"><i class="fa-solid fa-user-group"></i> คู่สนทนา</div>
+          <video id="remoteVideo" autoplay playsinline></video>
+          
+          <div id="aiSubtitleBox" class="interpreter-subtitle-overlay">
+            <span class="interpreter-badge">AI INTERPRETER</span>
+            <span id="subtitleText">ระบบตรวจจับภาษามือกำลังทำงาน...</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="call-actions-bar">
+        <button id="btnMatch" class="action-trigger-btn"><i class="fa-solid fa-shuffle"></i> เริ่มสุ่มจับคู่สนทนา</button>
+        <button id="btnToggleVideo" class="action-trigger-btn"><i class="fa-solid fa-video"></i></button>
+        <button id="btnHangup" class="action-trigger-btn btn-hangup-call" style="display: none;"><i class="fa-solid fa-phone-slash"></i> วางสาย</button>
+        <button id="btnNext" class="action-trigger-btn btn-next-match" style="display: none;"><i class="fa-solid fa-forward"></i> ปัดทิ้ง/หาคนใหม่</button>
+        <button id="btnReport" class="action-trigger-btn btn-report-incident" style="display: none;"><i class="fa-solid fa-circle-exclamation"></i> รายงานสายที่แล้ว</button>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>SignBridge Prototype | เว็บเรียนภาษามือไทย</p>
+  </footer>
+
+  <script src="js/streak.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/call.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      setTimeout(() => {
+        const currentUser = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser");
+        
+        if (!currentUser) {
+          const blocker = document.getElementById("authBlocker");
+          if (blocker) {
+            blocker.style.display = "flex";
+          }
+          
+          const matchBtn = document.getElementById("btnMatch");
+          const videoBtn = document.getElementById("btnToggleVideo");
+          if (matchBtn) matchBtn.disabled = true;
+          if (videoBtn) videoBtn.disabled = true;
+        }
+      }, 300);
+    });
+  </script>
+</body>
+</html>
