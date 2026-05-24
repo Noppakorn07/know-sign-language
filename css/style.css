@@ -537,3 +537,30 @@ select { max-width: 260px; }
   .setup-grid { grid-template-columns: 1fr; }
   .count-buttons { gap: 6px; }
 }
+.select-video-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 12px;
+  background: #eef3ff;
+  color: #2f4bd8;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.select-video-btn:hover {
+  background: #dfe8ff;
+}
+
+.video-option-wrap.selected-answer {
+  border: 3px solid #3b5bdb;
+  border-radius: 18px;
+  padding: 8px;
+  background: #eef3ff;
+}
+
+#submitVideoAnswerBtn {
+  margin-top: 20px;
+  width: 100%;
+}
