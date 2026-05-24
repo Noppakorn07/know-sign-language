@@ -58,13 +58,12 @@ function openModal(lesson) {
 
 // ─── ติดตามบทเรียนที่เปิดแล้ว ─────────────────────────────
 function getProgress() {
-  return JSON.parse(localStorage.getItem('sb_progress') || '{}');
+  return getLessonProgress();
 }
 function markDone(id) {
-  const p = getProgress();
-  p[id] = true;
-  localStorage.setItem('sb_progress', JSON.stringify(p));
-  // อัปเดต badge บน card โดยไม่ re-render ทั้งหน้า
+  saveLessonProgress(id);
+completeDailyActivity("lesson");
+ 
   document.querySelectorAll(`[data-lesson-id="${id}"]`).forEach(el => {
     el.classList.add('done');
     if (!el.querySelector('.done-tag')) {

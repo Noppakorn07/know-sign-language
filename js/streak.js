@@ -9,7 +9,18 @@ function getYesterday() {
 }
 
 function getStreakData() {
-  return JSON.parse(localStorage.getItem("streakData")) || {
+  const user = getCurrentUser();
+
+  if (!user) {
+    return {
+      streak: 0,
+      lastActiveDate: "",
+      todayLessons: 0,
+      todayQuizDone: false
+    };
+  }
+
+  return user.streakData || {
     streak: 0,
     lastActiveDate: "",
     todayLessons: 0,
@@ -18,7 +29,9 @@ function getStreakData() {
 }
 
 function saveStreakData(data) {
-  localStorage.setItem("streakData", JSON.stringify(data));
+  updateCurrentUser({
+    streakData: data
+  });
 }
 
 function completeDailyActivity(type) {

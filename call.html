@@ -219,12 +219,12 @@
       <i class="fa-solid fa-lock"></i>
       <h2>จำเป็นต้องเข้าสู่ระบบ</h2>
       <p>กรุณาเข้าสู่ระบบบัญชีผู้ใช้ SignBridge ของคุณก่อน เพื่อเข้าใช้งานห้องวิดีโอคอลสุ่มจับคู่ภาษามือ</p>
-      <a href="index.html" class="btn-login" id="fallbackLoginBtn">กลับไปหน้าแรกเพื่อล็อกอิน</a>
+      <a href="login.html" class="btn-login" id="fallbackLoginBtn">เข้าสู่ระบบ</a>
     </div>
   </div>
 
   <header class="navbar">
-    <a class="logo" href="index.html">🤟 SignBridge</a>
+    <a class="logo" href="index.html">know sign language</a>
     <nav>
       <a href="index.html">หน้าแรก</a>
       <a href="learn.html">เริ่มเรียน</a>
@@ -272,32 +272,39 @@
   </main>
 
   <footer class="footer">
-    <p>SignBridge Prototype | เว็บเรียนภาษามือไทย</p>
+    <p>know sign language</p>
   </footer>
 
-  <script src="js/streak.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/main.js"></script>
-  <script src="js/call.js"></script>
+  <script src="js/data.js"></script>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+<script src="js/streak.js"></script>
+<script src="js/dashboard.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      setTimeout(() => {
-        const currentUser = localStorage.getItem("currentUser") || sessionStorage.getItem("currentUser");
-        
-        if (!currentUser) {
-          const blocker = document.getElementById("authBlocker");
-          if (blocker) {
-            blocker.style.display = "flex";
-          }
-          
-          const matchBtn = document.getElementById("btnMatch");
-          const videoBtn = document.getElementById("btnToggleVideo");
-          if (matchBtn) matchBtn.disabled = true;
-          if (videoBtn) videoBtn.disabled = true;
+  document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(() => {
+      const currentUser = getCurrentUser();
+
+      if (!currentUser) {
+        const blocker = document.getElementById("authBlocker");
+        if (blocker) {
+          blocker.style.display = "flex";
         }
-      }, 300);
-    });
-  </script>
+
+        const matchBtn = document.getElementById("btnMatch");
+        const videoBtn = document.getElementById("btnToggleVideo");
+
+        if (matchBtn) matchBtn.disabled = true;
+        if (videoBtn) videoBtn.disabled = true;
+      }
+    }, 300);
+  });
+</script>
 </body>
 </html>
