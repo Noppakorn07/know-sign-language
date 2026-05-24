@@ -9,17 +9,27 @@
 <body>
   <main class="auth-page">
     <form id="loginForm" class="auth-card">
-      <a class="logo center" href="index.html">know sign langague</a>
-      <h1>เข้าสู่ระบบ</h1>
-      <label>ชื่อผู้ใช้</label>
-      <input id="loginUsername" type="text" required />
-      <label>รหัสผ่าน</label>
-      <input id="loginPassword" type="password" required />
-      <button class="btn primary full" type="submit">เข้าสู่ระบบ</button>
-      <p id="authMessage" class="feedback"></p>
-      <p>ยังไม่มีบัญชี? <a href="register.html">สมัครสมาชิก</a></p>
-    </form>
+  <a class="logo center" href="index.html">know sign language</a>
+
+  <h1>เข้าสู่ระบบ</h1>
+
+  <label>อีเมล</label>
+  <input id="loginEmail" type="email" required />
+
+  <label>รหัสผ่าน</label>
+  <input id="loginPassword" type="password" required />
+
+  <button class="btn primary full" type="submit">เข้าสู่ระบบ</button>
+
+  <p id="authMessage" class="feedback"></p>
+  <p>ยังไม่มีบัญชี? <a href="register.html">สมัครสมาชิก</a></p>
+</form>
   </main>
-  <script src="js/auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
 </body>
 </html>

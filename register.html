@@ -9,17 +9,31 @@
 <body>
   <main class="auth-page">
     <form id="registerForm" class="auth-card">
-      <a class="logo center" href="index.html">know sign langague</a>
-      <h1>สมัครสมาชิก</h1>
-      <label>ชื่อผู้ใช้</label>
-      <input id="registerUsername" type="text" required />
-      <label>รหัสผ่าน</label>
-      <input id="registerPassword" type="password" required minlength="4" />
-      <button class="btn primary full" type="submit">สมัครสมาชิก</button>
-      <p id="authMessage" class="feedback"></p>
-      <p>มีบัญชีแล้ว? <a href="login.html">เข้าสู่ระบบ</a></p>
-    </form>
+  <a class="logo center" href="index.html">know sign language</a>
+
+  <h1>สมัครสมาชิก</h1>
+
+  <label>ชื่อผู้ใช้</label>
+  <input id="registerUsername" type="text" required />
+
+  <label>อีเมล</label>
+  <input id="registerEmail" type="email" required />
+
+  <label>รหัสผ่าน</label>
+  <input id="registerPassword" type="password" required minlength="6" />
+
+  <button class="btn primary full" type="submit">สมัครสมาชิก</button>
+
+  <p id="authMessage" class="feedback"></p>
+  <p>มีบัญชีแล้ว? <a href="login.html">เข้าสู่ระบบ</a></p>
+</form>
   </main>
-  <script src="js/auth.js"></script>
+  
+ <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
 </body>
 </html>

@@ -8,7 +8,7 @@
 </head>
 <body>
   <header class="navbar">
-    <a class="logo" href="index.html">🤟 SignBridge</a>
+    <a class="logo" href="index.html">Know sign language</a>
     <nav>
       <a href="index.html">หน้าแรก</a>
       <a href="learn.html">เริ่มเรียน</a>
@@ -32,12 +32,12 @@
       <div class="setup-grid">
 
         <div class="setup-card">
-          <h3>📂 เลือกหมวดหมู่</h3>
+          <h3> เลือกหมวดหมู่</h3>
           <div id="catButtons" class="cat-buttons"></div>
         </div>
 
         <div class="setup-card">
-          <h3>🎯 รูปแบบข้อสอบ</h3>
+          <h3> รูปแบบข้อสอบ</h3>
           <div class="mode-buttons">
             <button class="mode-btn active" data-mode="video2text">
               <span class="mode-icon">🎬 → 📝</span>
@@ -53,7 +53,7 @@
         </div>
 
         <div class="setup-card">
-          <h3>🔢 จำนวนข้อ</h3>
+          <h3> จำนวนข้อ</h3>
           <div class="count-buttons">
             <button class="count-btn active" data-count="5">5 ข้อ</button>
             <button class="count-btn" data-count="10">10 ข้อ</button>
@@ -135,9 +135,16 @@
     </div>
   </div>
 
-  <script src="js/data.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/main.js"></script>
-  <script src="js/quiz.js"></script>
+ <script src="js/data.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+<script src="js/streak.js"></script>
+<script src="js/dashboard.js"></script>
 </body>
 </html>

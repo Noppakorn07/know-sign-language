@@ -266,6 +266,7 @@ function showResult() {
   }, 100);
 
   saveLastScore(score);
+  completeDailyActivity("quiz");
   progressFill.style.width = '100%';
 }
 
