@@ -28,13 +28,13 @@
     </section>
 
     <!-- ── หน้าตั้งค่าก่อนเริ่ม ── -->
-    <div id="quizSetup">
+      <div id="quizSetup">
       <div class="setup-grid">
 
-        <div class="setup-card">
-          <h3> เลือกหมวดหมู่</h3>
-          <div id="catButtons" class="cat-buttons"></div>
-        </div>
+       <div class="quiz-card">
+  <h3>เลือกหมวดหมู่</h3>
+  <div id="quizCategoryList" class="quiz-category-list"></div>
+</div>
 
         <div class="setup-card">
           <h3> รูปแบบข้อสอบ</h3>
@@ -135,16 +135,16 @@
     </div>
   </div>
 
- <script src="js/data.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
 
 <script src="js/firebase-config.js"></script>
 <script src="js/auth.js"></script>
 <script src="js/main.js"></script>
+
+<script src="js/data.js"></script>
 <script src="js/streak.js"></script>
-<script src="js/dashboard.js"></script>
+<script src="js/quiz.js"></script>
 </body>
 </html>
