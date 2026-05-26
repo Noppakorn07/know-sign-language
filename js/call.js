@@ -25,6 +25,10 @@ const PEER_CONFIG = {
 };
 
 // ─── DOM ────────────────────────────────────────────────
+const navActions = document.getElementById("navActions");
+const userChip = document.getElementById("userChip");
+const btnLogout = document.getElementById("btnLogout");
+
 const roomInput = document.getElementById("roomInput");
 const btnJoin = document.getElementById("btnJoin");
 const btnCopyLink = document.getElementById("btnCopyLink");
@@ -51,10 +55,18 @@ const btnHangup = document.getElementById("btnHangup");
 
 const sentenceWordsEl = document.getElementById("sentenceWords");
 const aiStatusChip = document.getElementById("aiStatusChip");
+const btnSendSentence = document.getElementById("btnSendSentence");
 const btnRemoveLast = document.getElementById("btnRemoveLast");
 const btnClearAll = document.getElementById("btnClearAll");
 
+const chatStatus = document.getElementById("chatStatus");
+const chatMessages = document.getElementById("chatMessages");
+const chatInput = document.getElementById("chatInput");
+const btnSendChat = document.getElementById("btnSendChat");
+
 // ─── State ──────────────────────────────────────────────
+let currentUser = null;
+
 let localStream = null;
 let peer = null;
 let activeCall = null;
@@ -82,18 +94,18 @@ function setStatus(message, type = "idle") {
   statusText.textContent = message;
   statusBar.className = "status-bar";
 
-  if (type === "connected") {
-    statusBar.classList.add("connected");
-  }
-
-  if (type === "error") {
-    statusBar.classList.add("error");
-  }
+  if (type === "connected") statusBar.classList.add("connected");
+  if (type === "error") statusBar.classList.add("error");
 }
 
 function setAiChip(html, className = "") {
   aiStatusChip.className = "ai-status-chip" + (className ? " " + className : "");
   aiStatusChip.innerHTML = html;
+}
+
+function getDisplayName() {
+  if (!currentUser) return "ผู้ใช้";
+  return currentUser.displayName || currentUser.email || "ผู้ใช้";
 }
 
 function hostId(roomId) {
@@ -125,16 +137,71 @@ function prefillRoomFromURL() {
   }
 }
 
+function enableChat(enabled) {
+  chatInput.disabled = !enabled;
+  btnSendChat.disabled = !enabled;
+  chatStatus.textContent = enabled
+    ? "เชื่อมต่อแล้ว พิมพ์ข้อความตอบกลับได้"
+    : "ยังไม่ได้เชื่อมต่อคู่สนทนา";
+}
+
+// ─── Auth ───────────────────────────────────────────────
+function initAuthGate() {
+  if (!window.firebase || !firebase.auth) {
+    currentUser = {
+      displayName: "Guest",
+      email: "guest"
+    };
+
+    userChip.textContent = "Guest mode";
+    navActions.innerHTML = `
+      <a class="btn-soft" href="login.html">เข้าสู่ระบบ</a>
+      <a class="btn-call" href="register.html">สมัครสมาชิก</a>
+    `;
+
+    setStatus("โหมด Guest: พิมพ์ Room ID แล้วกดเข้าร่วม");
+    initPage();
+    return;
+  }
+
+  firebase.auth().onAuthStateChanged(user => {
+    if (!user) {
+      const redirect = encodeURIComponent("call.html" + window.location.search);
+      window.location.href = `login.html?redirect=${redirect}`;
+      return;
+    }
+
+    currentUser = user;
+
+    const name = getDisplayName();
+    userChip.textContent = `เข้าสู่ระบบ: ${name}`;
+    btnLogout.style.display = "inline-flex";
+
+    navActions.innerHTML = `
+      <a class="btn-soft" href="dashboard.html">แดชบอร์ด</a>
+    `;
+
+    setStatus("เข้าสู่ระบบแล้ว พิมพ์ Room ID แล้วกดเข้าร่วม");
+    initPage();
+  });
+}
+
+async function logout() {
+  if (window.firebase && firebase.auth) {
+    await firebase.auth().signOut();
+  }
+}
+
 // ─── Media ──────────────────────────────────────────────
 async function startLocalMedia() {
   try {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      setStatus("เบราว์เซอร์นี้ไม่รองรับการเปิดกล้อง", "error");
-      alert("กรุณาใช้ Google Chrome และเปิดผ่าน Live Server");
+      setStatus("เบราว์เซอร์นี้ไม่รองรับกล้อง หรือไม่ได้เปิดผ่าน Live Server", "error");
+      alert("ต้องเปิดผ่าน Live Server เช่น http://127.0.0.1:5500/call.html");
       return false;
     }
 
-    setStatus("กำลังขออนุญาตใช้กล้องและไมค์...");
+    setStatus("กำลังขออนุญาตใช้กล้อง...");
 
     try {
       localStream = await navigator.mediaDevices.getUserMedia({
@@ -149,23 +216,17 @@ async function startLocalMedia() {
       console.warn("เปิดกล้องพร้อมไมค์ไม่ได้ ลองเปิดเฉพาะกล้อง:", firstError);
 
       localStream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          width: { ideal: 640 },
-          height: { ideal: 480 },
-          facingMode: "user"
-        },
+        video: true,
         audio: false
       });
 
-      setStatus("เปิดกล้องได้ แต่ไม่ได้เปิดไมค์");
       btnToggleMic.disabled = true;
+      btnToggleMic.innerHTML = '<i class="fa-solid fa-microphone-slash"></i> ไม่มีไมค์';
     }
 
     localVideoEl.srcObject = localStream;
-
-    await new Promise(resolve => {
-      localVideoEl.onloadedmetadata = resolve;
-    });
+    localVideoEl.muted = true;
+    localVideoEl.playsInline = true;
 
     await localVideoEl.play().catch(() => {});
 
@@ -175,18 +236,16 @@ async function startLocalMedia() {
   } catch (error) {
     console.error("Camera error:", error);
 
+    setStatus("เปิดกล้องไม่ได้: " + error.name, "error");
+
     if (error.name === "NotAllowedError") {
-      setStatus("ไม่ได้รับอนุญาตให้ใช้กล้อง", "error");
-      alert("กรุณากด Allow / อนุญาต Camera บนเบราว์เซอร์");
+      alert("ยังไม่ได้อนุญาตกล้อง ให้กด Allow / อนุญาต Camera");
     } else if (error.name === "NotFoundError") {
-      setStatus("ไม่พบกล้อง", "error");
-      alert("ไม่พบกล้อง ลองเช็กว่ากล้องใช้งานได้หรือไม่");
+      alert("ไม่พบกล้องในเครื่อง");
     } else if (error.name === "NotReadableError") {
-      setStatus("กล้องถูกโปรแกรมอื่นใช้งานอยู่", "error");
-      alert("ปิด Zoom / Google Meet / Camera app แล้วลองใหม่");
+      alert("กล้องถูกโปรแกรมอื่นใช้อยู่ ปิด Zoom / Meet / Camera app ก่อน");
     } else {
-      setStatus("เปิดกล้องไม่ได้: " + error.message, "error");
-      alert("เปิดกล้องไม่ได้ ดู Console เพิ่มเติม");
+      alert("เปิดกล้องไม่ได้ ดู error ใน Console");
     }
 
     return false;
@@ -260,8 +319,6 @@ async function joinRoom() {
   btnJoin.disabled = true;
   roomInput.disabled = true;
 
-  setStatus("กำลังเปิดกล้อง...");
-
   const mediaOk = await startLocalMedia();
 
   if (!mediaOk) {
@@ -269,8 +326,7 @@ async function joinRoom() {
     return;
   }
 
-  setStatus("กำลังเข้าห้อง...");
-
+  addSystemMessage(`เข้าห้อง: ${currentRoomId}`);
   connectAsGuest(currentRoomId);
 }
 
@@ -288,10 +344,7 @@ function connectAsGuest(roomId) {
 
     const timeout = setTimeout(() => {
       if (!connected) {
-        try {
-          call.close();
-        } catch (_) {}
-
+        try { call.close(); } catch (_) {}
         becomeHost(roomId);
       }
     }, 4000);
@@ -299,6 +352,7 @@ function connectAsGuest(roomId) {
     call.on("stream", remoteStream => {
       connected = true;
       clearTimeout(timeout);
+
       setupDataConnectionAsGuest(roomId);
       handleCallEstablished(call, remoteStream);
     });
@@ -337,6 +391,7 @@ function connectAsGuest(roomId) {
       peer.on("call", handleIncomingCall);
       peer.on("connection", handleIncomingDataConnection);
       peer.on("error", handlePeerError);
+
     } else if (error.type === "peer-unavailable") {
       becomeHost(roomId);
     } else {
@@ -353,8 +408,9 @@ function becomeHost(roomId) {
 
   peer.on("open", () => {
     setStatus("คุณเป็นเจ้าของห้อง รอคู่สนทนาเข้าร่วม...");
-    btnHangup.style.display = "flex";
+    btnHangup.style.display = "inline-flex";
     btnToggleAI.disabled = false;
+    addSystemMessage("สร้างห้องแล้ว รอเพื่อนเข้าร่วม");
   });
 
   peer.on("call", handleIncomingCall);
@@ -392,8 +448,11 @@ function handleCallEstablished(call, remoteStream) {
 
   setStatus("เชื่อมต่อสำเร็จ กำลังสนทนา", "connected");
 
-  btnHangup.style.display = "flex";
+  btnHangup.style.display = "inline-flex";
   btnToggleAI.disabled = false;
+
+  enableChat(true);
+  addSystemMessage("เชื่อมต่อคู่สนทนาแล้ว");
 }
 
 function handleCallEnded() {
@@ -413,7 +472,9 @@ function handleCallEnded() {
   remotePlaceholder.style.display = "flex";
   remoteSubtitle.classList.remove("visible");
 
+  enableChat(false);
   setStatus("สายถูกตัดหรือคู่สนทนาออกจากห้อง", "error");
+  addSystemMessage("คู่สนทนาออกจากห้องแล้ว");
 }
 
 function setupDataConnectionAsGuest(roomId) {
@@ -423,6 +484,10 @@ function setupDataConnectionAsGuest(roomId) {
 
   dataConn.on("open", () => {
     console.log("Data connection opened");
+    sendData({
+      type: "hello",
+      name: getDisplayName()
+    });
   });
 
   dataConn.on("data", handleDataMessage);
@@ -434,6 +499,13 @@ function setupDataConnectionAsGuest(roomId) {
 function handleIncomingDataConnection(connection) {
   dataConn = connection;
 
+  dataConn.on("open", () => {
+    sendData({
+      type: "hello",
+      name: getDisplayName()
+    });
+  });
+
   dataConn.on("data", handleDataMessage);
 
   dataConn.on("close", () => {
@@ -441,8 +513,26 @@ function handleIncomingDataConnection(connection) {
   });
 }
 
+function sendData(payload) {
+  if (!dataConn || !dataConn.open) return;
+
+  dataConn.send({
+    ...payload,
+    senderName: getDisplayName(),
+    sentAt: Date.now()
+  });
+}
+
 function handleDataMessage(data) {
   if (!data || typeof data !== "object") return;
+
+  if (data.type === "hello") {
+    addSystemMessage(`${data.senderName || "คู่สนทนา"} เข้าร่วมแล้ว`);
+  }
+
+  if (data.type === "chat") {
+    addChatMessage(data.senderName || "คู่สนทนา", data.text, "other");
+  }
 
   if (data.type === "sign-word") {
     remoteWord.textContent = `${data.word} (${data.confidence}%)`;
@@ -452,16 +542,10 @@ function handleDataMessage(data) {
       remoteSubtitle.classList.remove("visible");
     }, 2500);
   }
-}
 
-function sendSignWordToPeer(word, confidence) {
-  if (!dataConn || !dataConn.open) return;
-
-  dataConn.send({
-    type: "sign-word",
-    word,
-    confidence
-  });
+  if (data.type === "sentence") {
+    addChatMessage(data.senderName || "คู่สนทนา", data.text, "other");
+  }
 }
 
 function handlePeerError(error) {
@@ -503,7 +587,10 @@ function hangup() {
   btnToggleAI.innerHTML = '<i class="fa-solid fa-hand-sparkles"></i> เปิด AI ภาษามือ';
   btnToggleAI.className = "ctrl-btn primary";
 
+  enableChat(false);
   setStatus("วางสายแล้ว สามารถเข้าห้องใหม่ได้");
+  addSystemMessage("วางสายแล้ว");
+
   resetJoinUI();
 
   currentRoomId = "";
@@ -520,6 +607,68 @@ function destroyPeer() {
 function resetJoinUI() {
   btnJoin.disabled = false;
   roomInput.disabled = false;
+}
+
+// ─── Chat ───────────────────────────────────────────────
+function addSystemMessage(text) {
+  const div = document.createElement("div");
+  div.className = "message system";
+  div.textContent = text;
+  chatMessages.appendChild(div);
+  scrollChatToBottom();
+}
+
+function addChatMessage(name, text, side) {
+  const div = document.createElement("div");
+  div.className = `message ${side}`;
+
+  const nameEl = document.createElement("span");
+  nameEl.className = "name";
+  nameEl.textContent = name;
+
+  const textEl = document.createElement("span");
+  textEl.textContent = text;
+
+  div.appendChild(nameEl);
+  div.appendChild(textEl);
+
+  chatMessages.appendChild(div);
+  scrollChatToBottom();
+}
+
+function scrollChatToBottom() {
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function sendChatMessage() {
+  const text = chatInput.value.trim();
+
+  if (!text) return;
+
+  addChatMessage("คุณ", text, "me");
+
+  sendData({
+    type: "chat",
+    text
+  });
+
+  chatInput.value = "";
+}
+
+function sendSentenceToChat() {
+  const text = sentenceWords.join(" ").trim();
+
+  if (!text) {
+    alert("ยังไม่มีข้อความจากภาษามือให้ส่ง");
+    return;
+  }
+
+  addChatMessage("คุณ", text, "me");
+
+  sendData({
+    type: "sentence",
+    text
+  });
 }
 
 // ─── AI Load ────────────────────────────────────────────
@@ -558,8 +707,8 @@ async function loadAI() {
     aiLoaded = true;
 
     setAiChip('<i class="fa-solid fa-check"></i> AI พร้อม', "ready");
-
     return true;
+
   } catch (error) {
     console.error("[AI load error]", error);
     setAiChip('<i class="fa-solid fa-xmark"></i> โหลด AI ไม่ได้', "");
@@ -570,6 +719,11 @@ async function loadAI() {
 }
 
 async function toggleAI() {
+  if (!localStream) {
+    alert("กรุณาเข้าร่วมห้องและเปิดกล้องก่อน");
+    return;
+  }
+
   if (!isAiOn) {
     const ok = await loadAI();
 
@@ -755,7 +909,11 @@ function addWordToSentence(word, confidence) {
   sentenceWords.push(word);
   renderSentence();
 
-  sendSignWordToPeer(word, confidence);
+  sendData({
+    type: "sign-word",
+    word,
+    confidence
+  });
 }
 
 function renderSentence() {
@@ -793,46 +951,58 @@ function copyRoomLink() {
 }
 
 // ─── Events ─────────────────────────────────────────────
-btnJoin.addEventListener("click", joinRoom);
+function bindEvents() {
+  btnJoin.addEventListener("click", joinRoom);
 
-roomInput.addEventListener("keydown", event => {
-  if (event.key === "Enter") {
-    joinRoom();
-  }
-});
+  roomInput.addEventListener("keydown", event => {
+    if (event.key === "Enter") {
+      joinRoom();
+    }
+  });
 
-btnCopyLink.addEventListener("click", copyRoomLink);
+  btnCopyLink.addEventListener("click", copyRoomLink);
 
-btnToggleVideo.addEventListener("click", toggleVideo);
-btnToggleMic.addEventListener("click", toggleMic);
-btnToggleAI.addEventListener("click", toggleAI);
-btnHangup.addEventListener("click", hangup);
+  btnToggleVideo.addEventListener("click", toggleVideo);
+  btnToggleMic.addEventListener("click", toggleMic);
+  btnToggleAI.addEventListener("click", toggleAI);
+  btnHangup.addEventListener("click", hangup);
 
-btnRemoveLast.addEventListener("click", () => {
-  sentenceWords.pop();
-  renderSentence();
-});
+  btnSendChat.addEventListener("click", sendChatMessage);
 
-btnClearAll.addEventListener("click", () => {
-  sentenceWords = [];
-  lastAddedWord = "";
+  chatInput.addEventListener("keydown", event => {
+    if (event.key === "Enter") {
+      sendChatMessage();
+    }
+  });
 
-  localWordEl.textContent = "–";
-  localConfEl.textContent = "0%";
-  localBarEl.style.width = "0%";
+  btnSendSentence.addEventListener("click", sendSentenceToChat);
 
-  renderSentence();
-});
+  btnRemoveLast.addEventListener("click", () => {
+    sentenceWords.pop();
+    renderSentence();
+  });
+
+  btnClearAll.addEventListener("click", () => {
+    sentenceWords = [];
+    lastAddedWord = "";
+
+    localWordEl.textContent = "–";
+    localConfEl.textContent = "0%";
+    localBarEl.style.width = "0%";
+
+    renderSentence();
+  });
+
+  btnLogout.addEventListener("click", logout);
+}
+
+function initPage() {
+  prefillRoomFromURL();
+  enableChat(false);
+}
 
 // ─── Init ───────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", () => {
-  prefillRoomFromURL();
-
-  const params = new URLSearchParams(window.location.search);
-
-  if (params.get("room")) {
-    setTimeout(() => {
-      joinRoom();
-    }, 300);
-  }
+  bindEvents();
+  initAuthGate();
 });
