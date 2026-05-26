@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>เทรนโมเดล | Know Sign Language</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <header class="navbar">
+    <a class="logo" href="index.html">Know Sign Language</a>
+
+    <nav>
+      <a href="index.html">หน้าแรก</a>
+      <a href="collect-data.html">เก็บข้อมูล</a>
+      <a href="train.html" class="active">เทรนโมเดล</a>
+      <a href="practice.html">ฝึกผ่านกล้อง</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="page-header">
+      <p class="badge">Train AI</p>
+      <h1>เทรนโมเดลภาษามือ</h1>
+      <p>รองรับ dataset ที่มีทั้งท่า 1 มือ และ 2 มือ โดย input ต้องเป็น 126 ค่า</p>
+    </section>
+
+    <section class="card container">
+      <label for="datasetFile">เลือกไฟล์ dataset</label>
+      <input type="file" id="datasetFile" accept=".json" />
+
+      <div class="camera-actions">
+        <button class="btn primary" id="trainBtn">เริ่มเทรนโมเดล</button>
+      </div>
+
+      <div class="status-box">
+        <p id="trainStatus">ยังไม่ได้เริ่มเทรน</p>
+        <p>จำนวนข้อมูล: <strong id="datasetCount">0</strong></p>
+        <p>จำนวนคำ: <strong id="labelCount">0</strong></p>
+      </div>
+
+      <div class="progress-bar">
+        <div id="trainProgress"></div>
+      </div>
+
+      <pre id="labelOutput"></pre>
+
+      <p class="muted">
+        หลังเทรนเสร็จ จะได้ไฟล์ model.json, weights.bin และ labels.json
+        ให้นำไปไว้ในโฟลเดอร์ models/ksl-sign-model/
+      </p>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
+  <script src="js/train.js"></script>
+</body>
+</html>

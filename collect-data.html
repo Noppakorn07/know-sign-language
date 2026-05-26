@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>เก็บข้อมูล AI | Know Sign Language</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <header class="navbar">
+    <a class="logo" href="index.html">Know Sign Language</a>
+
+    <nav>
+      <a href="index.html">หน้าแรก</a>
+      <a href="practice.html">ฝึกผ่านกล้อง</a>
+      <a href="collect-data.html" class="active">เก็บข้อมูล</a>
+      <a href="train.html">เทรนโมเดล</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="page-header">
+      <p class="badge">AI Dataset</p>
+      <h1>เก็บข้อมูลท่าภาษามือ</h1>
+      <p>รองรับทั้งท่า 1 มือ และ 2 มือ โดยบันทึกเป็นข้อมูล 126 ค่าเหมือนกันทั้งหมด</p>
+    </section>
+
+    <section class="practice-layout">
+      <div class="card">
+        <h2>กล้องสำหรับเก็บข้อมูล</h2>
+
+        <div class="camera-box">
+          <video id="video" autoplay playsinline muted></video>
+          <canvas id="canvas"></canvas>
+        </div>
+
+        <div class="camera-actions">
+          <button class="btn primary" id="startCameraBtn">เปิดกล้อง</button>
+          <button class="btn secondary" id="stopCameraBtn">ปิดกล้อง</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>ตั้งค่าการเก็บข้อมูล</h2>
+
+        <label for="labelSelect">เลือกคำภาษามือ</label>
+        <select id="labelSelect">
+          <option value="สวัสดี">สวัสดี</option>
+          <option value="ขอบคุณ">ขอบคุณ</option>
+          <option value="ขอโทษ">ขอโทษ</option>
+          <option value="ช่วยด้วย">ช่วยด้วย</option>
+          <option value="ห้องน้ำ">ห้องน้ำ</option>
+          
+        </select>
+
+        <label for="handModeSelect">รูปแบบท่า</label>
+        <select id="handModeSelect">
+          <option value="one">ท่าใช้ 1 มือ</option>
+          <option value="two">ท่าใช้ 2 มือ</option>
+        </select>
+
+        <label for="mainHandSelect">มือหลักสำหรับท่า 1 มือ</label>
+        <select id="mainHandSelect">
+          <option value="right">มือขวา</option>
+          <option value="left">มือซ้าย</option>
+        </select>
+
+        <div class="status-box">
+          <p id="statusText">ยังไม่ได้เปิดกล้อง</p>
+          <p>จำนวนมือที่ตรวจพบ: <strong id="handCountText">0</strong></p>
+          <p>จำนวนข้อมูลทั้งหมด: <strong id="sampleCount">0</strong></p>
+        </div>
+
+        <div class="camera-actions">
+          <button class="btn primary" id="recordBtn">บันทึก 1 ตัวอย่าง</button>
+          <button class="btn secondary" id="autoRecordBtn">บันทึกอัตโนมัติ</button>
+          <button class="btn secondary" id="stopRecordBtn">หยุดบันทึก</button>
+        </div>
+
+        <button class="btn primary full" id="downloadDatasetBtn">
+          ดาวน์โหลด dataset.json
+        </button>
+
+        <p class="muted">
+          แนะนำ: ท่า 1 มือให้ใช้มือเดิมทุกครั้ง เช่น มือขวาตลอด ส่วนท่า 2 มือควรวางมือให้เห็นครบทั้งสองข้างก่อนบันทึก
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="js/collect-data.js"></script>
+</body>
+</html>
