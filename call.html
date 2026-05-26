@@ -3,308 +3,545 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>วิดีโอคอลภาษามือ - SignBridge</title>
+  <title>วิดีโอคอลภาษามือ | Know Sign Language</title>
+
   <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
+
   <style>
-    .video-page-container {
+    .call-page {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 40px 20px;
+      padding: 32px 20px;
       display: flex;
       flex-direction: column;
-      gap: 30px;
+      gap: 24px;
     }
-    .status-box {
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      text-align: center;
-      font-size: 1.1rem;
-      font-weight: 500;
-      color: #1e293b;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-      border-left: 5px solid var(--primary, #4f46e5);
-    }
-    .video-layout-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 25px;
-      width: 100%;
-    }
-    @media (max-width: 768px) {
-      .video-layout-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-    .video-stream-card {
-      position: relative;
-      background: #0f172a;
-      border-radius: 16px;
-      overflow: hidden;
-      aspect-ratio: 4/3;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+    .room-bar {
       display: flex;
+      gap: 10px;
       align-items: center;
-      justify-content: center;
-    }
-    .video-stream-card video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    #localVideo {
-      transform: scaleX(-1);
-    }
-    .stream-tag {
-      position: absolute;
-      top: 15px;
-      left: 15px;
-      background: rgba(15, 23, 42, 0.75);
-      color: #fff;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 0.9rem;
-      backdrop-filter: blur(4px);
-      z-index: 5;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .interpreter-subtitle-overlay {
-      position: absolute;
-      bottom: 20px;
-      left: 5%;
-      width: 90%;
-      background: rgba(15, 23, 42, 0.85);
-      color: #38bdf8;
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      padding: 12px;
-      border-radius: 8px;
-      text-align: center;
-      font-weight: 500;
-      font-size: 1.1rem;
-      backdrop-filter: blur(4px);
-      display: none;
-      z-index: 10;
-    }
-    .interpreter-subtitle-overlay.active {
-      display: block;
-    }
-    .interpreter-badge {
-      background: #38bdf8;
-      color: #0f172a;
-      font-size: 0.75rem;
-      font-weight: bold;
-      padding: 2px 6px;
-      border-radius: 4px;
-      margin-right: 8px;
-    }
-    .call-actions-bar {
-      display: flex;
       flex-wrap: wrap;
-      justify-content: center;
-      gap: 15px;
-      margin-top: 10px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 16px 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
-    .action-trigger-btn {
-      background: var(--primary, #4f46e5);
-      color: white;
+
+    .room-label {
+      font-weight: 700;
+      color: #334155;
+      white-space: nowrap;
+    }
+
+    .room-bar input {
+      flex: 1;
+      min-width: 180px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1.5px solid #dce3f6;
+      font-family: inherit;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .room-bar input:focus {
+      border-color: #3b5bdb;
+    }
+
+    .btn-join,
+    .btn-copy {
       border: none;
-      padding: 14px 28px;
-      font-size: 1rem;
-      font-weight: 600;
-      border-radius: 50px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
-      box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
-      transition: all 0.2s ease;
+      gap: 7px;
     }
-    .action-trigger-btn:hover {
-      opacity: 0.95;
-      transform: translateY(-2px);
-    }
-    .action-trigger-btn:disabled {
-      background: #9ca3af;
-      color: #e5e7eb;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-    .action-trigger-btn.searching {
-      background: #eab308;
-      box-shadow: 0 4px 6px -1px rgba(234, 179, 8, 0.2);
-    }
-    .action-trigger-btn.off {
-      background: #6b7280;
-    }
-    .btn-hangup-call {
-      background: #ef4444;
-      box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.2);
-    }
-    .btn-next-match {
-      background: #f59e0b;
+
+    .btn-join {
+      background: #3b5bdb;
       color: #fff;
-      box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.2);
+      padding: 10px 22px;
     }
-    .btn-report-incident {
-      background: transparent;
-      border: 2px solid #ef4444;
-      color: #ef4444;
-      box-shadow: none;
+
+    .btn-join:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
     }
-    .btn-report-incident:hover {
+
+    .btn-copy {
+      background: #eef3ff;
+      color: #3b5bdb;
+      padding: 10px 16px;
+    }
+
+    .status-bar {
+      background: #fff;
+      padding: 14px 20px;
+      border-radius: 12px;
+      border-left: 4px solid #3b5bdb;
+      font-weight: 600;
+      color: #1e293b;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-bar .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #94a3b8;
+      flex-shrink: 0;
+    }
+
+    .status-bar.connected .dot {
+      background: #22c55e;
+      animation: pulse 1.5s infinite;
+    }
+
+    .status-bar.error .dot {
       background: #ef4444;
-      color: white;
     }
-    .auth-blocker {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 700px) {
+      .video-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .vid-card {
+      position: relative;
+      background: #0f172a;
+      border-radius: 18px;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .vid-card video {
       width: 100%;
       height: 100%;
-      background: rgba(15, 23, 42, 0.95);
-      z-index: 9999;
+      object-fit: cover;
+      display: block;
+      background: #0f172a;
+    }
+
+    #localVideo {
+      transform: scaleX(-1);
+    }
+
+    .vid-label {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(0, 0, 0, 0.55);
+      color: #fff;
+      padding: 5px 13px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      z-index: 5;
+    }
+
+    .vid-label .led {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+    }
+
+    .subtitle-overlay {
+      position: absolute;
+      bottom: 16px;
+      left: 5%;
+      width: 90%;
+      background: rgba(10, 20, 40, 0.82);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #38bdf8;
+      padding: 10px 14px;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1rem;
+      z-index: 10;
+      display: none;
+    }
+
+    .subtitle-overlay.visible {
+      display: block;
+    }
+
+    .subtitle-badge {
+      background: #0ea5e9;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 4px;
+      margin-right: 8px;
+    }
+
+    .confidence-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      margin-top: 6px;
+    }
+
+    .conf-bar-outer {
+      flex: 1;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .conf-bar-inner {
+      height: 100%;
+      background: #38bdf8;
+      border-radius: 3px;
+      transition: width 0.4s;
+    }
+
+    .remote-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      color: #94a3b8;
+      gap: 12px;
+      background: #0f172a;
     }
-    .auth-card {
-      background: white;
-      padding: 40px;
-      border-radius: 20px;
-      max-width: 450px;
-      width: 100%;
-      text-align: center;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-      color: #1e293b;
+
+    .remote-placeholder i {
+      font-size: 3rem;
     }
-    .auth-card i {
-      font-size: 4rem;
-      color: #4f46e5;
-      margin-bottom: 20px;
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
     }
-    .auth-card h2 {
+
+    .ctrl-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 50px;
+      border: none;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .ctrl-btn:disabled {
+      opacity: 0.45;
+      pointer-events: none;
+    }
+
+    .ctrl-btn.primary {
+      background: #3b5bdb;
+      color: #fff;
+    }
+
+    .ctrl-btn.secondary {
+      background: #f1f5f9;
+      color: #334155;
+    }
+
+    .ctrl-btn.danger {
+      background: #ef4444;
+      color: #fff;
+    }
+
+    .ctrl-btn.active-ai {
+      background: #0ea5e9;
+      color: #fff;
+    }
+
+    .sentence-strip {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 16px 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .sentence-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
       margin-bottom: 12px;
-      font-size: 1.6rem;
     }
-    .auth-card p {
+
+    .sentence-head h3 {
+      margin: 0;
+      font-size: 0.95rem;
       color: #64748b;
-      margin-bottom: 30px;
+    }
+
+    .sentence-words {
+      min-height: 42px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #1e293b;
       line-height: 1.5;
     }
-    .auth-card .btn-login {
-      background: #4f46e5;
-      color: white;
-      text-decoration: none;
-      padding: 14px 30px;
-      border-radius: 50px;
-      font-weight: 600;
-      display: inline-block;
-      transition: background 0.2s;
+
+    .sentence-words.empty {
+      color: #94a3b8;
+      font-weight: 400;
+      font-style: italic;
     }
-    .auth-card .btn-login:hover {
-      background: #4338ca;
+
+    .sentence-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .sentence-actions button {
+      background: #f1f5f9;
+      border: none;
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #475569;
+    }
+
+    .sentence-actions .btn-clear {
+      color: #ef4444;
+    }
+
+    .ai-status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 20px;
+      background: #f1f5f9;
+      color: #64748b;
+      border: 1px solid #e2e8f0;
+    }
+
+    .ai-status-chip.loading {
+      background: #fef9c3;
+      color: #92400e;
+      border-color: #fde68a;
+    }
+
+    .ai-status-chip.ready {
+      background: #dcfce7;
+      color: #166534;
+      border-color: #bbf7d0;
+    }
+
+    .ai-status-chip.detecting {
+      background: #dbeafe;
+      color: #1d4ed8;
+      border-color: #bfdbfe;
+    }
+
+    .spinner {
+      display: inline-block;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
   </style>
-  <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
 </head>
+
 <body>
-
-  <div id="authBlocker" class="auth-blocker">
-    <div class="auth-card">
-      <i class="fa-solid fa-lock"></i>
-      <h2>จำเป็นต้องเข้าสู่ระบบ</h2>
-      <p>กรุณาเข้าสู่ระบบบัญชีผู้ใช้ SignBridge ของคุณก่อน เพื่อเข้าใช้งานห้องวิดีโอคอลสุ่มจับคู่ภาษามือ</p>
-      <a href="login.html" class="btn-login" id="fallbackLoginBtn">เข้าสู่ระบบ</a>
-    </div>
-  </div>
-
   <header class="navbar">
-    <a class="logo" href="index.html">know sign language</a>
+    <a class="logo" href="index.html">Know Sign Language</a>
+
     <nav>
       <a href="index.html">หน้าแรก</a>
-      <a href="learn.html">เริ่มเรียน</a>
+      <a href="learn.html">เรียนรู้</a>
       <a href="quiz.html">แบบทดสอบ</a>
-      <a href="practice.html">ฝึกกับกล้อง</a>
+      <a href="practice.html">ฝึกผ่านกล้อง</a>
       <a href="dashboard.html">แดชบอร์ด</a>
       <a href="call.html" class="active">วิดีโอคอล</a>
     </nav>
+
     <div class="nav-actions" id="navActions"></div>
   </header>
 
   <main>
-    <div class="video-page-container">
-      
-      <div class="status-box">
-        <span id="statusText">กรุณากดปุ่มเพื่อเปิดใช้งานกล้องและเริ่มระบบสุ่มจับคู่</span>
+    <div class="call-page">
+      <div class="room-bar">
+        <span class="room-label">
+          <i class="fa-solid fa-link" style="margin-right: 5px; color: #3b5bdb;"></i>
+          ห้อง:
+        </span>
+
+        <input
+          id="roomInput"
+          type="text"
+          placeholder="พิมพ์ Room ID เช่น test123 หรือวางลิงก์ที่ได้รับมา"
+        />
+
+        <button id="btnJoin" class="btn-join">
+          <i class="fa-solid fa-phone"></i>
+          เข้าร่วม
+        </button>
+
+        <button id="btnCopyLink" class="btn-copy">
+          <i class="fa-solid fa-copy"></i>
+          คัดลอกลิงก์
+        </button>
       </div>
 
-      <div class="video-layout-grid">
-        <div class="video-stream-card">
-          <div class="stream-tag"><i class="fa-solid fa-user"></i> กล้องของคุณ</div>
+      <div class="status-bar" id="statusBar">
+        <div class="dot"></div>
+        <span id="statusText">พิมพ์ Room ID แล้วกด “เข้าร่วม”</span>
+      </div>
+
+      <div class="video-grid">
+        <div class="vid-card">
+          <div class="vid-label">
+            <div class="led"></div>
+            กล้องของคุณ
+          </div>
+
           <video id="localVideo" autoplay playsinline muted></video>
+
+          <div id="localSubtitle" class="subtitle-overlay">
+            <span class="subtitle-badge">ภาษามือ</span>
+            <span id="localWord">–</span>
+
+            <div class="confidence-row">
+              <span id="localConf">0%</span>
+              <div class="conf-bar-outer">
+                <div id="localBar" class="conf-bar-inner" style="width: 0%;"></div>
+              </div>
+            </div>
+          </div>
         </div>
-        
-        <div class="video-stream-card">
-          <div class="stream-tag" style="background: #2563eb;"><i class="fa-solid fa-user-group"></i> คู่สนทนา</div>
+
+        <div class="vid-card">
+          <div class="vid-label" style="background: rgba(37, 99, 235, 0.6);">
+            <div class="led"></div>
+            คู่สนทนา
+          </div>
+
           <video id="remoteVideo" autoplay playsinline></video>
-          
-          <div id="aiSubtitleBox" class="interpreter-subtitle-overlay">
-            <span class="interpreter-badge">AI INTERPRETER</span>
-            <span id="subtitleText">ระบบตรวจจับภาษามือกำลังทำงาน...</span>
+
+          <div id="remotePlaceholder" class="remote-placeholder">
+            <i class="fa-solid fa-user-clock"></i>
+            <p>รอคู่สนทนาเข้าร่วม...</p>
+          </div>
+
+          <div id="remoteSubtitle" class="subtitle-overlay">
+            <span class="subtitle-badge">จากคู่สนทนา</span>
+            <span id="remoteWord">–</span>
           </div>
         </div>
       </div>
 
-      <div class="call-actions-bar">
-        <button id="btnMatch" class="action-trigger-btn"><i class="fa-solid fa-shuffle"></i> เริ่มสุ่มจับคู่สนทนา</button>
-        <button id="btnToggleVideo" class="action-trigger-btn"><i class="fa-solid fa-video"></i></button>
-        <button id="btnHangup" class="action-trigger-btn btn-hangup-call" style="display: none;"><i class="fa-solid fa-phone-slash"></i> วางสาย</button>
-        <button id="btnNext" class="action-trigger-btn btn-next-match" style="display: none;"><i class="fa-solid fa-forward"></i> ปัดทิ้ง/หาคนใหม่</button>
-        <button id="btnReport" class="action-trigger-btn btn-report-incident" style="display: none;"><i class="fa-solid fa-circle-exclamation"></i> รายงานสายที่แล้ว</button>
+      <div class="controls">
+        <button id="btnToggleVideo" class="ctrl-btn secondary">
+          <i class="fa-solid fa-video"></i>
+          กล้อง
+        </button>
+
+        <button id="btnToggleMic" class="ctrl-btn secondary">
+          <i class="fa-solid fa-microphone"></i>
+          ไมค์
+        </button>
+
+        <button id="btnToggleAI" class="ctrl-btn primary" disabled>
+          <i class="fa-solid fa-hand-sparkles"></i>
+          เปิด AI ภาษามือ
+        </button>
+
+        <button id="btnHangup" class="ctrl-btn danger" style="display: none;">
+          <i class="fa-solid fa-phone-slash"></i>
+          วางสาย
+        </button>
       </div>
 
+      <div class="sentence-strip">
+        <div class="sentence-head">
+          <h3>ข้อความที่แปลจากภาษามือ</h3>
+          <div id="aiStatusChip" class="ai-status-chip">
+            <i class="fa-solid fa-circle"></i>
+            AI ยังไม่ทำงาน
+          </div>
+        </div>
+
+        <div id="sentenceWords" class="sentence-words empty">
+          ทำท่าภาษามือหน้ากล้อง แล้วกด “เปิด AI ภาษามือ”
+        </div>
+
+        <div class="sentence-actions">
+          <button id="btnRemoveLast">
+            <i class="fa-solid fa-delete-left"></i>
+            ลบคำล่าสุด
+          </button>
+
+          <button id="btnClearAll" class="btn-clear">
+            <i class="fa-solid fa-trash"></i>
+            ล้างทั้งหมด
+          </button>
+        </div>
+      </div>
     </div>
   </main>
 
   <footer class="footer">
-    <p>know sign language</p>
+    <p>Know Sign Language</p>
   </footer>
 
-<script src="js/data.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
-
-<script src="js/firebase-config.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/main.js"></script>
-<script src="js/streak.js"></script>
-<script src="js/call.js"></script>
-  <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    setTimeout(() => {
-      const currentUser = getCurrentUser();
-
-      if (!currentUser) {
-        const blocker = document.getElementById("authBlocker");
-        if (blocker) {
-          blocker.style.display = "flex";
-        }
-
-        const matchBtn = document.getElementById("btnMatch");
-        const videoBtn = document.getElementById("btnToggleVideo");
-
-        if (matchBtn) matchBtn.disabled = true;
-        if (videoBtn) videoBtn.disabled = true;
-      }
-    }, 300);
-  });
-</script>
+  <script type="module" src="js/call.js"></script>
 </body>
 </html>
