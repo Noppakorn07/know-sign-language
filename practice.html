@@ -3,60 +3,71 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ฝึกกับกล้อง know sign language</title>
+  <title>ฝึกผ่านกล้อง | Know Sign Language</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
+
 <body>
   <header class="navbar">
-    <a class="logo" href="index.html">know sign language</a>
+    <a class="logo" href="index.html">Know Sign Language</a>
+
     <nav>
       <a href="index.html">หน้าแรก</a>
-      <a href="learn.html">เริ่มเรียน</a>
+      <a href="learn.html">เรียนรู้</a>
       <a href="quiz.html">แบบทดสอบ</a>
-      <a href="practice.html" class="active">ฝึกกับกล้อง</a>
+      <a href="practice.html" class="active">ฝึกผ่านกล้อง</a>
       <a href="dashboard.html">แดชบอร์ด</a>
-      <a href="call.html">วิดีโอคอลภาษามือ</a>
-    <div class="nav-actions" id="navActions"></div>
+    </nav>
   </header>
 
   <main class="page">
     <section class="page-header">
-      <p class="badge">Practice</p>
-      <h1>ฝึกภาษามือผ่านเว็บแคม</h1>
-      <p>test na</p>
+      <p class="badge">AI Practice</p>
+      <h1>ฝึกแปลงท่าภาษามือเป็นข้อความ</h1>
+      <p>เปิดกล้อง แล้วทำท่า “สวัสดี” หรือ “ขอบคุณ” ที่เทรนไว้</p>
     </section>
 
     <section class="practice-layout">
-      <div class="camera-card">
-        <video id="camera" autoplay playsinline muted></video>
-        <div id="cameraPlaceholder" class="camera-placeholder">กด “เปิดกล้อง” เพื่อเริ่มฝึก</div>
+      <div class="card">
+        <h2>กล้องเว็บแคม</h2>
+
+        <div class="camera-box">
+          <video id="video" autoplay playsinline muted></video>
+          <canvas id="canvas"></canvas>
+        </div>
+
+        <div class="camera-actions">
+          <button class="btn primary" id="startCameraBtn">เปิดกล้อง</button>
+          <button class="btn secondary" id="stopCameraBtn">ปิดกล้อง</button>
+          <button class="btn primary" id="startPredictBtn">เริ่มตรวจจับ</button>
+        </div>
       </div>
-      <div class="practice-panel">
-        <h2>โจทย์ฝึกวันนี้</h2>
-        <p id="practicePrompt">ลองทำท่า “สวัสดี” ตามบทเรียน</p>
-        <div class="button-row">
-          <button id="startCameraBtn" class="btn primary">เปิดกล้อง</button>
-          <button id="stopCameraBtn" class="btn secondary">ปิดกล้อง</button>
+
+      <div class="card">
+        <h2>ผลการตรวจจับ</h2>
+
+        <div class="status-box">
+          <p id="statusText">ยังไม่ได้เปิดกล้อง</p>
+          <p>คำที่ตรวจพบ: <strong id="detectedWord">-</strong></p>
+          <p>ความมั่นใจ: <strong id="confidenceText">0%</strong></p>
         </div>
-        <button id="mockDetectBtn" class="btn ghost">จำลองผลตรวจจับ</button>
-        <div class="result-box">
-          <p>ผลลัพธ์</p>
-          <h3 id="detectResult">ยังไม่ได้ตรวจจับ</h3>
+
+        <h3>ข้อความที่เรียงได้</h3>
+        <div id="sentenceBox" class="sentence-box">ยังไม่มีข้อความ</div>
+
+        <div class="camera-actions">
+          <button class="btn secondary" id="removeLastBtn">ลบคำล่าสุด</button>
+          <button class="btn secondary" id="clearSentenceBtn">ล้างข้อความ</button>
         </div>
+
+        <p class="muted">
+        
+        </p>
       </div>
     </section>
   </main>
 
-  <script src="js/data.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
-
-<script src="js/firebase-config.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/main.js"></script>
-<script src="js/streak.js"></script>
-<script src="js/camera.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
+  <script type="module" src="js/practice-ai.js"></script>
 </body>
 </html>
