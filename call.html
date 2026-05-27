@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>วิดีโอคอลภาษามือ | Know Sign Language</title>
 
   <link rel="stylesheet" href="css/style.css" />
@@ -12,7 +11,6 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
   />
 
-  <!-- PeerJS + TensorFlow.js -->
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
 
@@ -22,55 +20,46 @@
     }
 
     .call-page {
-      max-width: 1280px;
+      max-width: 1180px;
       margin: 0 auto;
-      padding: 24px 18px 40px;
+      padding: 22px 16px 36px;
     }
 
-    .call-topbar {
+    .top-card,
+    .status-bar,
+    .controls,
+    .chat-side,
+    .video-card,
+    .ai-note-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    }
+
+    .top-card {
+      border-radius: 20px;
+      padding: 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 14px;
+      gap: 12px;
       flex-wrap: wrap;
-      background: #fff;
-      border: 1px solid #e2e8f0;
-      border-radius: 18px;
-      padding: 14px 18px;
-      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
-      margin-bottom: 18px;
+      margin-bottom: 14px;
     }
 
-    .room-bar {
+    .match-title {
       display: flex;
       align-items: center;
       gap: 10px;
-      flex: 1;
-      min-width: 280px;
-      flex-wrap: wrap;
+      color: #1e293b;
+      font-weight: 900;
     }
 
-    .room-label {
-      font-weight: 800;
-      color: #334155;
-      white-space: nowrap;
-    }
-
-    .room-bar input {
-      flex: 1;
-      min-width: 190px;
-      padding: 11px 14px;
-      border-radius: 12px;
-      border: 1.5px solid #dce3f6;
-      font-family: inherit;
-      font-size: 15px;
-      outline: none;
-      background: #f8fafc;
-    }
-
-    .room-bar input:focus {
-      border-color: #3b5bdb;
-      background: #fff;
+    .match-title small {
+      display: block;
+      color: #64748b;
+      font-weight: 700;
+      margin-top: 2px;
     }
 
     .user-area {
@@ -86,35 +75,40 @@
       border-radius: 999px;
       padding: 8px 12px;
       font-size: 0.88rem;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .btn-call,
     .btn-soft,
-    .btn-danger {
+    .btn-danger,
+    .ctrl-btn {
       border: none;
-      border-radius: 12px;
-      padding: 10px 16px;
+      border-radius: 999px;
+      padding: 11px 18px;
       font-family: inherit;
-      font-weight: 800;
+      font-weight: 900;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 7px;
+      justify-content: center;
+      gap: 8px;
       transition: 0.18s ease;
     }
 
     .btn-call {
       background: #3b5bdb;
       color: #fff;
+      min-width: 124px;
     }
 
-    .btn-call:hover {
-      background: #2f4bc0;
+    .btn-call:hover,
+    .ctrl-btn.primary:hover,
+    .chat-toggle-btn:hover {
       transform: translateY(-1px);
     }
 
-    .btn-call:disabled {
+    .btn-call:disabled,
+    .send-btn:disabled {
       background: #9ca3af;
       cursor: not-allowed;
       transform: none;
@@ -125,7 +119,8 @@
       color: #3b5bdb;
     }
 
-    .btn-danger {
+    .btn-danger,
+    .ctrl-btn.danger {
       background: #fee2e2;
       color: #dc2626;
     }
@@ -134,19 +129,17 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      background: #fff;
       border-left: 5px solid #3b5bdb;
-      border-radius: 14px;
-      padding: 13px 16px;
+      border-radius: 16px;
+      padding: 12px 14px;
       color: #1e293b;
-      font-weight: 700;
-      box-shadow: 0 3px 12px rgba(15, 23, 42, 0.05);
-      margin-bottom: 18px;
+      font-weight: 800;
+      margin-bottom: 14px;
     }
 
     .status-bar .dot {
-      width: 11px;
-      height: 11px;
+      width: 10px;
+      height: 10px;
       border-radius: 999px;
       background: #94a3b8;
     }
@@ -169,36 +162,23 @@
       50% { opacity: 0.35; }
     }
 
-    .ome-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.65fr) minmax(320px, 0.9fr);
-      gap: 18px;
-      align-items: stretch;
-    }
-
-    @media (max-width: 900px) {
-      .ome-layout {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .left-call-side {
+    .main-layout {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 16px;
     }
 
-    .video-stack {
+    .call-side {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .video-grid {
       display: grid;
-      grid-template-columns: 1.35fr 0.8fr;
-      gap: 14px;
-      align-items: stretch;
-    }
-
-    @media (max-width: 800px) {
-      .video-stack {
-        grid-template-columns: 1fr;
-      }
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+      width: 100%;
     }
 
     .video-card {
@@ -206,32 +186,20 @@
       background: #0f172a;
       border-radius: 22px;
       overflow: hidden;
-      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.18);
-      min-height: 280px;
+      height: 380px;
+      min-height: 380px;
+      width: 100%;
     }
 
-    .video-card.remote {
-      min-height: 430px;
-    }
-
+    .video-card.remote,
     .video-card.local {
-      min-height: 260px;
-    }
-
-    @media (max-width: 800px) {
-      .video-card.remote {
-        min-height: 320px;
-      }
-
-      .video-card.local {
-        min-height: 260px;
-      }
+      height: 380px;
+      min-height: 380px;
     }
 
     .video-card video {
       width: 100%;
       height: 100%;
-      min-height: inherit;
       object-fit: cover;
       display: block;
       background: #0f172a;
@@ -239,6 +207,20 @@
 
     #localVideo {
       transform: scaleX(-1);
+    }
+
+    @media (max-width: 900px) {
+      .video-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .video-card,
+      .video-card.remote,
+      .video-card.local {
+        height: 300px;
+        min-height: 300px;
+      }
     }
 
     .video-label {
@@ -251,10 +233,10 @@
       gap: 7px;
       background: rgba(15, 23, 42, 0.72);
       color: #fff;
-      padding: 7px 13px;
+      padding: 7px 12px;
       border-radius: 999px;
-      font-size: 0.84rem;
-      font-weight: 800;
+      font-size: 0.82rem;
+      font-weight: 900;
       backdrop-filter: blur(8px);
     }
 
@@ -275,12 +257,12 @@
       align-items: center;
       justify-content: center;
       z-index: 3;
-      gap: 12px;
+      gap: 10px;
       text-align: center;
     }
 
     .remote-placeholder i {
-      font-size: 3rem;
+      font-size: 2.8rem;
     }
 
     .ai-subtitle {
@@ -290,10 +272,10 @@
       width: 90%;
       z-index: 8;
       background: rgba(8, 18, 36, 0.88);
-      color: #38bdf8;
-      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #e0f2fe;
+      border: 1px solid rgba(125, 211, 252, 0.35);
       padding: 11px 13px;
-      border-radius: 14px;
+      border-radius: 16px;
       text-align: center;
       font-weight: 900;
       display: none;
@@ -308,7 +290,7 @@
       background: #0ea5e9;
       color: #fff;
       padding: 2px 8px;
-      border-radius: 6px;
+      border-radius: 999px;
       margin-right: 6px;
       font-size: 0.72rem;
       font-weight: 900;
@@ -339,15 +321,12 @@
       transition: width 0.25s ease;
     }
 
-    .sentence-under-video {
-      background: #fff;
-      border: 1px solid #e2e8f0;
+    .ai-note-card {
       border-radius: 18px;
       padding: 14px;
-      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
     }
 
-    .sentence-head {
+    .ai-note-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -356,7 +335,7 @@
       margin-bottom: 10px;
     }
 
-    .sentence-head h3 {
+    .ai-note-head h3 {
       margin: 0;
       color: #334155;
       font-size: 1rem;
@@ -367,7 +346,7 @@
       align-items: center;
       gap: 7px;
       font-size: 0.82rem;
-      font-weight: 800;
+      font-weight: 900;
       padding: 6px 12px;
       border-radius: 999px;
       background: #f1f5f9;
@@ -394,28 +373,21 @@
     }
 
     .sentence-box {
-      min-height: 48px;
+      min-height: 44px;
       background: #f8fafc;
       border: 1px solid #e2e8f0;
       border-radius: 14px;
       padding: 12px 14px;
-      font-size: 1.08rem;
+      font-size: 1rem;
       font-weight: 800;
       color: #1e293b;
-      line-height: 1.5;
+      line-height: 1.45;
     }
 
     .sentence-box.empty {
       color: #94a3b8;
-      font-weight: 500;
+      font-weight: 600;
       font-style: italic;
-    }
-
-    .sentence-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 10px;
     }
 
     .controls {
@@ -424,33 +396,8 @@
       justify-content: center;
       gap: 10px;
       flex-wrap: wrap;
-      background: #fff;
-      border: 1px solid #e2e8f0;
       border-radius: 18px;
-      padding: 14px;
-      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
-    }
-
-    .ctrl-btn {
-      border: none;
-      border-radius: 999px;
-      padding: 12px 18px;
-      font-family: inherit;
-      font-weight: 900;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .ctrl-btn:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-    }
-
-    .ctrl-btn.secondary {
-      background: #f1f5f9;
-      color: #334155;
+      padding: 13px;
     }
 
     .ctrl-btn.primary {
@@ -458,35 +405,28 @@
       color: #fff;
     }
 
-    .ctrl-btn.active-ai {
-      background: #0ea5e9;
-      color: #fff;
-    }
-
-    .ctrl-btn.danger {
-      background: #ef4444;
-      color: #fff;
-    }
-
     .chat-side {
-      background: #fff;
-      border: 1px solid #e2e8f0;
       border-radius: 22px;
       overflow: hidden;
-      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
-      min-height: 650px;
+      min-height: 0;
       display: flex;
       flex-direction: column;
     }
 
+    .chat-side.closed .chat-messages,
+    .chat-side.closed .chat-input-area,
+    .chat-side.closed .chat-status {
+      display: none;
+    }
+
     .chat-header {
-      padding: 15px 16px;
+      padding: 14px 16px;
       background: #f8fafc;
       border-bottom: 1px solid #e2e8f0;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 12px;
     }
 
     .chat-header h2 {
@@ -495,14 +435,28 @@
       color: #1e293b;
     }
 
+    .chat-toggle-btn {
+      border: none;
+      background: #eef3ff;
+      color: #3b5bdb;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-family: inherit;
+      font-weight: 900;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: 0.18s ease;
+    }
+
     .chat-status {
       font-size: 0.8rem;
       color: #64748b;
       font-weight: 700;
+      margin-top: 3px;
     }
 
     .chat-messages {
-      flex: 1;
+      height: 260px;
       padding: 16px;
       overflow-y: auto;
       display: flex;
@@ -512,7 +466,7 @@
     }
 
     .message {
-      max-width: 82%;
+      max-width: 84%;
       padding: 10px 12px;
       border-radius: 16px;
       line-height: 1.45;
@@ -522,8 +476,8 @@
     .message .name {
       display: block;
       font-size: 0.72rem;
-      opacity: 0.7;
-      font-weight: 800;
+      opacity: 0.75;
+      font-weight: 900;
       margin-bottom: 2px;
     }
 
@@ -585,11 +539,6 @@
       font-size: 1rem;
     }
 
-    .send-btn:disabled {
-      background: #9ca3af;
-      cursor: not-allowed;
-    }
-
     .spinner {
       display: inline-block;
       animation: spin 0.8s linear infinite;
@@ -611,7 +560,7 @@
       <a href="quiz.html">แบบทดสอบ</a>
       <a href="practice.html">ฝึกผ่านกล้อง</a>
       <a href="dashboard.html">แดชบอร์ด</a>
-      <a href="call.html" class="active">วิดีโอคอล</a>
+      <a href="call.html" class="active">วิดีโอคอลภาษามือ</a>
     </nav>
 
     <div class="nav-actions" id="navActions">
@@ -620,33 +569,24 @@
   </header>
 
   <main class="call-page">
-    <div class="call-topbar">
-      <div class="room-bar">
-        <span class="room-label">
-          <i class="fa-solid fa-link" style="color:#3b5bdb;"></i>
-          ห้อง
-        </span>
-
-        <input
-          id="roomInput"
-          type="text"
-          placeholder="พิมพ์ Room ID เช่น test123 หรือวางลิงก์ที่ได้รับมา"
-        />
-
-        <button id="btnJoin" class="btn-call">
-          <i class="fa-solid fa-phone"></i>
-          เข้าร่วม
-        </button>
-
-        <button id="btnCopyLink" class="btn-soft">
-          <i class="fa-solid fa-copy"></i>
-          คัดลอกลิงก์
-        </button>
+    <div class="top-card">
+      <div class="match-title">
+        <i class="fa-solid fa-video" style="color:#3b5bdb;"></i>
+        <div>
+          วิดีโอคอลภาษามือ
+          <small>ใช้กล้องอย่างเดียว ไม่มีไมค์ และไม่มีปุ่มปิดกล้อง</small>
+        </div>
       </div>
 
       <div class="user-area">
+        <button id="btnJoin" class="btn-call" type="button">
+          <i class="fa-solid fa-shuffle"></i>
+          สุ่ม
+        </button>
+
         <span id="userChip" class="user-chip">กำลังตรวจสอบผู้ใช้...</span>
-        <button id="btnLogout" class="btn-danger" style="display:none;">
+
+        <button id="btnLogout" class="btn-danger" type="button" style="display:none;">
           <i class="fa-solid fa-right-from-bracket"></i>
           ออกจากระบบ
         </button>
@@ -658,9 +598,9 @@
       <span id="statusText">กำลังตรวจสอบการเข้าสู่ระบบ...</span>
     </div>
 
-    <div class="ome-layout">
-      <section class="left-call-side">
-        <div class="video-stack">
+    <div class="main-layout">
+      <section class="call-side">
+        <div class="video-grid">
           <div class="video-card remote">
             <div class="video-label">
               <div class="led"></div>
@@ -671,104 +611,79 @@
 
             <div id="remotePlaceholder" class="remote-placeholder">
               <i class="fa-solid fa-user-clock"></i>
-              <p>รอคู่สนทนาเข้าร่วม...</p>
+              <p>กด “สุ่ม” เพื่อหาคู่สนทนา</p>
             </div>
 
             <div id="remoteSubtitle" class="ai-subtitle">
-              <span class="subtitle-badge">จากคู่สนทนา</span>
+              <span class="subtitle-badge">ซับอ่านภาษามือ</span>
               <span id="remoteWord">–</span>
             </div>
           </div>
 
-          <div>
-            <div class="video-card local">
-              <div class="video-label">
-                <div class="led"></div>
-                กล้องของคุณ
-              </div>
+          <div class="video-card local">
+            <div class="video-label">
+              <div class="led"></div>
+              กล้องของคุณ
+            </div>
 
-              <video id="localVideo" autoplay playsinline muted></video>
+            <video id="localVideo" autoplay playsinline muted></video>
 
-              <div id="localSubtitle" class="ai-subtitle">
-                <span class="subtitle-badge">ภาษามือ</span>
-                <span id="localWord">–</span>
+            <div id="localSubtitle" class="ai-subtitle">
+              <span class="subtitle-badge">AI อ่านคุณ</span>
+              <span id="localWord">–</span>
 
-                <div class="confidence-row">
-                  <span id="localConf">0%</span>
-                  <div class="conf-bar-outer">
-                    <div id="localBar" class="conf-bar-inner"></div>
-                  </div>
+              <div class="confidence-row">
+                <span id="localConf">0%</span>
+                <div class="conf-bar-outer">
+                  <div id="localBar" class="conf-bar-inner"></div>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
 
-            <div class="sentence-under-video" style="margin-top:14px;">
-              <div class="sentence-head">
-                <h3>ข้อความที่เรียงจากภาษามือ</h3>
-                <div id="aiStatusChip" class="ai-status-chip">
-                  <i class="fa-solid fa-circle"></i>
-                  AI ยังไม่ทำงาน
-                </div>
-              </div>
-
-              <div id="sentenceWords" class="sentence-box empty">
-                ทำท่าภาษามือหน้ากล้อง แล้วกด “เปิด AI ภาษามือ”
-              </div>
-
-              <div class="sentence-actions">
-                <button id="btnSendSentence" class="btn-call">
-                  <i class="fa-solid fa-paper-plane"></i>
-                  ส่งข้อความนี้
-                </button>
-
-                <button id="btnRemoveLast" class="btn-soft">
-                  <i class="fa-solid fa-delete-left"></i>
-                  ลบคำล่าสุด
-                </button>
-
-                <button id="btnClearAll" class="btn-danger">
-                  <i class="fa-solid fa-trash"></i>
-                  ล้างทั้งหมด
-                </button>
-              </div>
+        <div class="ai-note-card">
+          <div class="ai-note-head">
+            <h3>ข้อความจากภาษามือของคุณ</h3>
+            <div id="aiStatusChip" class="ai-status-chip">
+              <i class="fa-solid fa-circle"></i>
+              AI จะเริ่มอ่านเมื่อเชื่อมต่อ
             </div>
+          </div>
+
+          <div id="sentenceWords" class="sentence-box empty">
+            AI จะอ่านภาษามือของคุณ แล้วส่งเป็นข้อความในแชทอัตโนมัติ
           </div>
         </div>
 
         <div class="controls">
-          <button id="btnToggleVideo" class="ctrl-btn secondary">
-            <i class="fa-solid fa-video"></i>
-            กล้อง
-          </button>
-
-          <button id="btnToggleMic" class="ctrl-btn secondary">
-            <i class="fa-solid fa-microphone"></i>
-            ไมค์
-          </button>
-
-          <button id="btnToggleAI" class="ctrl-btn primary" disabled>
-            <i class="fa-solid fa-hand-sparkles"></i>
-            เปิด AI ภาษามือ
-          </button>
-
-          <button id="btnHangup" class="ctrl-btn danger" style="display:none;">
+          <button id="btnHangup" class="ctrl-btn danger" type="button" style="display:none;">
             <i class="fa-solid fa-phone-slash"></i>
-            วางสาย
+            จบสาย
+          </button>
+
+          <button id="btnReportLast" class="ctrl-btn danger" type="button" style="display:none;">
+            <i class="fa-solid fa-flag"></i>
+            รายงานคนที่แล้ว
           </button>
         </div>
       </section>
 
-      <aside class="chat-side">
+      <aside class="chat-side" id="chatSide">
         <div class="chat-header">
           <div>
-            <h2><i class="fa-solid fa-comments"></i> แชตข้อความ</h2>
+            <h2><i class="fa-solid fa-comments"></i> แชท</h2>
             <div id="chatStatus" class="chat-status">ยังไม่ได้เชื่อมต่อคู่สนทนา</div>
           </div>
+
+          <button id="btnToggleChat" class="chat-toggle-btn" type="button">
+            ซ่อนแชท
+          </button>
         </div>
 
         <div id="chatMessages" class="chat-messages">
           <div class="message system">
-            เข้าห้องเดียวกันกับเพื่อน แล้วสามารถพิมพ์ตอบกันได้ที่นี่
+            กดสุ่มเพื่อเริ่มคุย เมื่อ AI อ่านภาษามือได้ ข้อความจะเข้ามาในแชทด้วย
           </div>
         </div>
 
@@ -776,10 +691,10 @@
           <input
             id="chatInput"
             type="text"
-            placeholder="พิมพ์ข้อความตอบกลับ..."
+            placeholder="พิมพ์ข้อความคุย..."
             disabled
           />
-          <button id="btnSendChat" class="send-btn" disabled>
+          <button id="btnSendChat" class="send-btn" type="button" disabled>
             <i class="fa-solid fa-paper-plane"></i>
           </button>
         </div>
@@ -791,11 +706,22 @@
     <p>Know Sign Language</p>
   </footer>
 
-  <!-- Firebase Auth -->
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
   <script src="js/firebase-config.js"></script>
+
+  <script>
+    const chatSide = document.getElementById("chatSide");
+    const btnToggleChat = document.getElementById("btnToggleChat");
+
+    btnToggleChat.addEventListener("click", () => {
+      chatSide.classList.toggle("closed");
+
+      const isClosed = chatSide.classList.contains("closed");
+      btnToggleChat.textContent = isClosed ? "เปิดแชท" : "ซ่อนแชท";
+    });
+  </script>
 
   <script type="module" src="js/call.js"></script>
 </body>
