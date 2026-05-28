@@ -15,7 +15,6 @@
       <a href="quiz.html">แบบทดสอบ</a>
       <a href="practice.html">ฝึกกับกล้อง</a>
       <a href="dashboard.html">แดชบอร์ด</a>
-      <a href="call.html">วิดีโอคอลภาษามือ</a>
     </nav>
     <div class="nav-actions" id="navActions"></div>
   </header>
@@ -24,7 +23,7 @@
     <section class="page-header">
       <p class="badge">Learning</p>
       <h1>บทเรียนภาษามือไทย</h1>
-      <p>เลือกหมวดหมู่หรือค้นหาคำที่ต้องการเรียน วิดีโอตัวอย่างสามารถเปลี่ยนเป็นไฟล์ของคุณเองได้</p>
+      <p>เลือกหมวดหมู่ รูปแบบสื่อ หรือค้นหาคำที่ต้องการเรียน วิดีโอและรูปภาพสามารถใส่ไฟล์ของคุณเองได้</p>
     </section>
 
     <section class="toolbar">
@@ -32,21 +31,25 @@
       <select id="categoryFilter">
         <option value="all">ทุกหมวดหมู่</option>
       </select>
+      <select id="mediaTypeFilter">
+        <option value="video">📹 รูปแบบวิดีโอ</option>
+        <option value="image">🖼️ รูปแบบรูปภาพ</option>
+      </select>
     </section>
 
     <div id="lessonGrid"></div>
   </main>
 
- <script src="js/data.js"></script>
+  <script src="js/data.js"></script>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compเระ at.js"></script>
 
-<script src="js/firebase-config.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/main.js"></script>
-<script src="js/streak.js"></script>
-<script src="js/learn.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/streak.js"></script>
+  <script src="js/learn.js"></script>
 </body>
 </html>
