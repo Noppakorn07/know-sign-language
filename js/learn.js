@@ -129,12 +129,12 @@ function renderLessons() {
   });
 
   const catIcon = {
-    'การทักทาย':     'default',
-    'ชีวิตประจำวัน': 'default',
-    'ฉุกเฉิน':       'default',
-    'มารยาท':        'default',
-    'ตัวเลข':        'default',
-    'สีและสิ่งของ':  'default',
+    'การทักทาย':     ' ',
+    'ชีวิตประจำวัน': '1',
+    'ฉุกเฉิน':       '',
+    'มารยาท':        '',
+    'ตัวเลข':        '',
+    'สีและสิ่งของ':  '',
   };
 
   lessonGrid.innerHTML = Object.entries(groups).map(([cat, items]) => `
